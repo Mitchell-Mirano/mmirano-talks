@@ -1,0 +1,1250 @@
+\documentclass[11pt,aspectratio=169]{beamer}
+
+% ——————————————————————————
+% TEMA: MADRID (Formal)
+\usetheme{Madrid}
+% Uso del color por defecto para el tema Madrid.
+% \usecolortheme{structure} % Si se usa Madrid, lo mejor es omitir o usar color themes básicos.
+
+% --- AÑADIR SÍMBOLOS DE NAVEGACIÓN (Controles de Avance/Retroceso) ---
+% Esto añade los símbolos de navegación en la esquina inferior derecha.
+% En el tema Madrid, se añaden automáticamente si no se desactivan.
+\setbeamertemplate{navigation symbols}{} % Se desactiva el pie de página por defecto de Madrid
+\setbeamertemplate{navigation symbols}[horizontal] % y se fuerzan los símbolos de navegación en una barra separada
+
+% ——————————————————————————
+% PAQUETES Y AJUSTES VISUALES
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}        % Paquete esencial para \includegraphics
+\usepackage{booktabs}        % tablas elegantes
+\usepackage{tikz}            % diagramas vectoriales
+\usepackage{listings}        % código fuente
+\usepackage{xcolor}
+\usepackage{caption}         % Permite el uso de \captionof, aunque se usan \begin{figure}
+\usepackage{hyperref}
+
+% ——————————————————————————
+% ENLACES Y COLORES
+% Mantenemos los colores. En el tema Madrid, estos colores se aplicarán a la barra superior,
+% títulos de sección, bloques y texto destacado.
+\definecolor{mainblue}{HTML}{003366} % Azul oscuro
+\definecolor{mainaccent}{HTML}{CFAE70} % Dorado/Ocre
+
+% Configurar los colores del tema Madrid para usar nuestros colores formales.
+\setbeamercolor{palette primary}{bg=mainblue, fg=white}
+\setbeamercolor{palette secondary}{bg=mainaccent, fg=black}
+\setbeamercolor{palette tertiary}{bg=mainblue!80, fg=white}
+\setbeamercolor{section in head/foot}{bg=mainblue, fg=white}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=mainblue,
+  urlcolor=mainblue % Unificar el color de los URLs a azul oscuro.
+}
+
+% ——————————————————————————
+% CONFIGURACIÓN DE CÓDIGO PYTHON
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!5},
+  frame=single,
+  rulecolor=\color{gray!60},
+  keywordstyle=\color{blue!80!black}\bfseries,
+  stringstyle=\color{green!40!black},
+  commentstyle=\color{gray!60}\itshape,
+  showstringspaces=false,
+  breaklines=true,
+  tabsize=4,
+  captionpos=b
+}
+
+% ——————————————————————————
+% PLANTILLAS VISUALES PERSONALIZADAS
+% Se eliminan las plantillas de Metropolis que no aplican a Madrid,
+% y se mantiene la configuración de color para la página de sección
+% usando los ajustes de \setbeamercolor anteriores.
+\setbeamerfont{section title}{size=\Large,series=\bfseries}
+
+% ——————————————————————————
+% INFORMACIÓN DE LA PONENCIA
+\title[Motor ML con NumPy y CuPy]{\textbf{Más allá de PyTorch:} construyendo un motor de aprendizaje automático con NumPy y CuPy}
+\author[Mitchell Mirano]{\textbf{Mitchell Mirano}} 
+\institute[UNMSM]{Facultad de Ciencias Matemáticas – UNMSM \\ \small Área de Computación Científica} 
+\date[12 nov 2025]{\textbf{12 de noviembre de 2025} \\ \small \textit{Semana de Computación Científica}}
+
+% ——————————————————————————
+\begin{document}
+
+\maketitle
+
+% Tabla de contenido (Madrid ya tiene un estilo de TOC formal)
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+
+\section{Introducción}
+
+\begin{frame}{De las Matemáticas a Modelos de ML en Producción}
+  \begin{itemize}
+    \item \textbf{Necesidad de Control y Explicabilidad Profunda}
+    \begin{itemize}
+      \item Las arquitecturas de “caja negra” limitan la trazabilidad y el \textbf{control total sobre el flujo computacional}.
+      \item La transparencia es esencial para una \textbf{explicabilidad rigurosa} de las predicciones y los gradientes.
+    \end{itemize}
+
+    \item \textbf{Ineficiencia y Costos Operacionales}
+    \begin{itemize}
+      \item Los \textit{frameworks} monolíticos (TensorFlow, PyTorch) suelen ser sobredimensionados para problemas específicos.
+      \item Producen \textbf{sobreconsumo de memoria y recursos}, elevando los costos en despliegues de producción.
+    \end{itemize}
+
+    \item \textbf{Necesidad de Flexibilidad e Innovación}
+    \begin{itemize}
+      \item Los sistemas existentes restringen la \textbf{experimentación con nuevas funciones de activación, gradientes o arquitecturas}.
+      \item Un \textbf{framework propio} permite adaptar la estructura matemática y computacional al objetivo de investigación o producción.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+% ——————————————————————————
+\section{Fundamentos de Machine Learning (ML)}
+
+\begin{frame}{Definición de Machine Learning}
+  \begin{block}{Aprendizaje Automático (ML)}
+    El Machine Learning es una rama de la Inteligencia Artificial que permite a los sistemas \textbf{aprender de datos},
+     identificar patrones y tomar decisiones con \textbf{mínima o nula intervención humana explícita}.
+  \end{block}
+
+  \begin{itemize}
+    \item Se basa en modelos matemáticos capaces de ajustar sus parámetros internos a medida que se exponen a nueva información.
+    \item El objetivo es la \textbf{generalización}: obtener un rendimiento útil en datos no vistos previamente.
+    \item Los algoritmos de aprendizaje automático se duviden en los siguiente paradigmas: \textbf{aprendizaje supervisado}, \textbf{aprendizaje no supervisado} y \textbf{aprendizaje por refuerzo}.
+  \end{itemize}
+\end{frame}
+
+% ——————————————————————————
+% INICIO DE LOS FRAMES INDIVIDUALES DE TIPOS DE ML
+% ——————————————————————————
+
+\begin{frame}{Aprendizaje Supervisado: Regresión}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Predecir una \textbf{variable continua}, es decir, un número real dentro de un rango.
+      \end{block}
+
+      \vspace{1em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Finanzas:} Estimación de precios de vivienda o acciones.
+        \item \textbf{Medio Ambiente:} Predicción de la temperatura o niveles de polución.
+        \item \textbf{Comercio:} Proyecciones detalladas de ventas futuras.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % 
+        \includegraphics[width=0.95\textwidth]{images/regression.png}
+        \caption{Modelo prediciendo valores continuos.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Aprendizaje Supervisado: Clasificación}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Asignar una instancia a una \textbf{categoría o clase discreta} predefinida.
+      \end{block}
+
+      \vspace{1em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Seguridad:} Detección de *spam* (Clase A) vs. *No-spam* (Clase B).
+        \item \textbf{Medicina:} Diagnóstico binario (enfermo/sano).
+        \item \textbf{Visión:} Reconocimiento de dígitos o de objetos en imágenes.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % 
+        \includegraphics[width=0.95\textwidth]{images/classification.png}
+        \caption{Separación de datos en clases discretas.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Aprendizaje No Supervisado: Clustering (Agrupamiento)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Identificar \textbf{grupos o estructuras naturales} en los datos. Es un problema de Aprendizaje \textbf{No Supervisado}.
+      \end{block}
+
+      \vspace{1em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Marketing:} Segmentación de clientes basada en comportamiento de compra.
+        \item \textbf{Investigación:} Agrupamiento automático de documentos o artículos científicos.
+        \item \textbf{Análisis de Datos:} Detección de anomalías o *outliers*.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % 
+        \includegraphics[width=0.95\textwidth]{images/clustering.png}
+        \caption{Identificación de estructuras sin etiquetas previas.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Aprendizaje por Refuerzo (RL)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Entrenar un \textbf{agente} para tomar decisiones secuenciales en un entorno, maximizando una \textbf{recompensa} acumulada.
+      \end{block}
+
+      \vspace{0.5em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Robótica:} Control y navegación autónoma.
+        \item \textbf{Finanzas:} Optimización de carteras de inversión.
+        \item \textbf{Juegos:} Desarrollo de IA que supera a humanos (e.g., AlphaGo).
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % Se recomienda usar una imagen de un agente interactuando con su entorno (e.g., un diagrama de un loop de RL).
+        \includegraphics[width=0.95\textwidth]{images/RL.png} 
+        \caption{Diagrama del ciclo de interacción en RL.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Fundamentos de redes neuronales}
+
+\begin{frame}{Fundamentos de Redes Neuronales (NN)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición de Red Neuronal}
+        Un modelo computacional que imita la estructura del cerebro, compuesto por capas de unidades simples (\textbf{neuronas artificiales}) interconectadas para aprender patrones complejos.
+      \end{block}
+      
+      \vspace{1em}
+      \textbf{Componentes Clave}
+      \begin{itemize}
+        \item[$\to$] \textbf{Entradas}: Datos iniciales (\textit{features}).
+        \item[$\to$] \textbf{Capas Ocultas}: Donde ocurre la transformación de los datos y la extracción de características.
+        \item[$\to$] \textbf{Salida}: La predicción o resultado final del modelo.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Arquitectura y Flujo de Datos}
+      \begin{figure}
+        \centering
+        % Se recomienda una imagen sencilla de un perceptrón multicapa.
+        \includegraphics[width=0.95\textwidth]{images/red-neuronal.png}
+        \caption{Estructura de una Red Neuronal básica.}
+      \end{figure}
+    
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}{Ubicación de las Redes Neuronales en el Campo de la IA}
+  \begin{columns}
+    \begin{column}{0.55\textwidth}
+      \textbf{La Jerarquía de la Inteligencia Artificial}
+      \begin{itemize}
+        \item[1.] \textbf{Inteligencia Artificial (IA)}
+        \begin{itemize}
+          \item Es el campo más amplio. Su meta es crear sistemas que imiten la inteligencia humana para realizar tareas.
+          \item Ejemplos: Planificación, resolución de problemas, y razonamiento.
+        \end{itemize}
+        
+        \item[2.] \textbf{Machine Learning (ML)}
+        \begin{itemize}
+          \item Se centra en el desarrollo de algoritmos que permiten a las computadoras \textbf{aprender de los datos} sin programación explícita.
+        \end{itemize}
+
+        \item[3.] \textbf{Redes Neuronales(NN)/Deep Learning(DL)}
+        \begin{itemize}
+          \item Utiliza modelos complejos basados en capas (\textbf{Deep Learning}) para tareas de abstracción y predicción de alto nivel.
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{figure}
+        \centering
+        % Diagrama de Venn mostrando la relación jerárquica: IA > ML > DL/NN
+        \includegraphics[width=0.9\textwidth]{images/deep learning.png}
+        \caption{Relación jerárquica entre IA, ML y DL.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Neurona Artificial: Definición e Inspiración}
+  
+  \begin{block}{Definición}
+    Es la unidad fundamental de las Redes Neuronales, diseñada para simular el proceso de \textbf{activación e inhibición} de las neuronas biológicas. Su función principal es recibir señales y producir una única salida.
+  \end{block}
+  \vspace{-0.5em} 
+  
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/neuronas.png} 
+    \vspace{-0.7em}
+    \caption{Paralelo entre neurona biológica y unidad artificial.}
+  \end{figure}
+\end{frame}
+
+
+% --- Frame 1: Definición y combinación lineal ---
+\begin{frame}{Neurona Artificial: Combinación Lineal (I)}
+\begin{columns}
+\begin{column}{0.9\textwidth}
+
+\textbf{Suma Ponderada (\(z\)): Fundamento de la Neurona}
+
+\begin{block}{Definición Vectorial}
+La activación interna o señal integrada (\(z\)) se calcula como el \textbf{producto escalar} entre el vector de pesos 
+\(\mathbf{w} \in \mathbb{R}^n\) y el vector de entrada 
+\(\mathbf{x} \in \mathbb{R}^n\), más un término escalar de sesgo (\(b \in \mathbb{R}\)):
+\end{block}
+
+\[
+\hat{y} = z = \mathbf{w}^\top \mathbf{x} + b
+\]
+
+\textbf{Interpretación Matemática:}
+\begin{itemize}
+  \item \(z\) representa una \textbf{combinación lineal} de las entradas ponderadas por sus pesos.
+  \item El sesgo \(b\) introduce un desplazamiento adicional que evita la restricción de pasar por el origen.
+  \item Este modelo constituye la base de toda red neuronal feed-forward.
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Expansión escalar y análisis del bias ---
+\begin{frame}{Neurona Artificial: Expansión Escalar y Rol del Bias (II)}
+\begin{columns}
+\begin{column}{0.9\textwidth}
+
+\textbf{Expansión Escalar:}
+\[
+z = \sum_{i=1}^{n} w_i x_i + b
+\]
+
+\textbf{Interpretación Geométrica:}
+\begin{itemize}
+  \item La ecuación define un \textbf{hiperplano} en \(\mathbb{R}^n\):
+  \[
+  \mathbf{w}^\top \mathbf{x} + b = 0
+  \]
+  \item El vector \(\mathbf{w}\) es \textbf{normal} al hiperplano.
+  \item El término \(b\) determina su desplazamiento respecto al origen:
+  \[
+  \text{distancia} = -\frac{b}{\|\mathbf{w}\|}
+  \]
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 1: Definición de Regresión Lineal ---
+\begin{frame}{Regresión Lineal: Aplicación de la Neurona Artificial (I)}
+\begin{columns}
+\begin{column}{0.9\textwidth}
+
+\textbf{Regresión Lineal Simple:}
+\begin{itemize}
+  \item Se modela una variable de salida \(y \in \mathbb{R}\) a partir de una única variable de entrada \(x \in \mathbb{R}\).
+  \item La relación se expresa como:
+  \[
+  \hat{y} = w_1 x + b
+  \]
+  donde \(w_1\) representa la pendiente y \(b\) el intercepto.
+\end{itemize}
+
+\textbf{Regresión Lineal Múltiple:}
+\begin{itemize}
+  \item Se extiende el modelo a \(n\) variables de entrada:
+  \[
+  \hat{y} = \sum_{i=1}^{n} w_i x_i + b = \mathbf{w}^\top \mathbf{x} + b
+  \]
+  \item Cada \(w_i\) representa la contribución lineal de la característica \(x_i\) a la variable objetivo \(y\).
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Formulación Matemática Completa ---
+\begin{frame}{Regresión Lineal: Formulación Matricial (II)}
+
+El modelo lineal para \(n\) observaciones y \(m\) características se expresa como:
+
+\[
+\hat{\mathbf{y}} = X \mathbf{w} + \mathbf{b}
+\]
+
+donde:
+\begin{itemize}
+  \item \(X \in \mathbb{R}^{n \times m}\): matriz de diseño o entradas.
+  \item \(\mathbf{w} \in \mathbb{R}^{m}\): vector de parámetros o pesos.
+  \item \(\mathbf{b} \in \mathbb{R}^{n}\): vector de sesgos o bias.
+  \item \(\hat{\mathbf{y}} \in \mathbb{R}^{n}\): vector de valores predichos.
+\end{itemize}
+
+\[
+\begin{bmatrix}
+\hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_{11} & x_{12} & \dots & x_{1m} \\
+x_{21} & x_{22} & \dots & x_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{n1} & x_{n2} & \dots & x_{nm}
+\end{bmatrix}
+\begin{bmatrix}
+w_1 \\ w_2 \\ \vdots \\ w_m
+\end{bmatrix}
++
+\begin{bmatrix}
+b \\ b \\ \vdots \\ b
+\end{bmatrix}
+\]
+
+\end{frame}
+
+% --- Frame 1: Definición del Error Cuadrático Medio ---
+\begin{frame}{Regresión Lineal: Función de Costo (III-A)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Definición del Error Cuadrático Medio (MSE):}
+
+El objetivo es estimar los parámetros \(\mathbf{w}\) y \(b\) que minimicen la discrepancia entre los valores observados \(\mathbf{y}\) y los predichos \(\hat{\mathbf{y}}\):
+
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \hat{y}_i - y_i \right)^2
+\]
+
+\textbf{Sustituyendo el modelo lineal:}
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \mathbf{w}^\top \mathbf{x}_i + b - y_i \right)^2
+\]
+
+\textbf{Interpretación:}
+\begin{itemize}
+  \item Mide el \textbf{error promedio cuadrático} entre la salida real y la predicha.
+  \item Penaliza más fuertemente los errores grandes.
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Forma Matricial y Propiedades ---
+\begin{frame}{Regresión Lineal: Función de Costo (III-B)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Forma Matricial:}
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| X\mathbf{w} + b\mathbf{1}_n - \mathbf{y} \|_2^2
+\]
+
+\textbf{Donde:}
+\begin{itemize}
+  \item \(X \in \mathbb{R}^{n \times m}\) es la matriz de diseño.
+  \item \(\mathbf{1}_n\) es un vector columna de unos (\(n \times 1\)).
+  \item \(\mathbf{y}\) es el vector de salidas reales.
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 1: Derivadas Parciales del MSE (Forma Escalar) ---
+\begin{frame}{Regresión Lineal: Derivadas del MSE (IV-A)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Función de costo:}
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \mathbf{w}^\top \mathbf{x}_i + b - y_i \right)^2
+\]
+
+Sea el error para el ejemplo \(i\)-ésimo:
+\[
+e_i = \hat{y}_i - y_i = \mathbf{w}^\top \mathbf{x}_i + b - y_i
+\]
+
+Entonces:
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} e_i^2
+\]
+
+\textbf{Derivadas parciales:}
+\[
+\frac{\partial \mathcal{L}}{\partial w_j} = \frac{2}{n} \sum_{i=1}^{n} e_i \, x_{ij}
+\qquad
+\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \sum_{i=1}^{n} e_i
+\]
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Derivadas Parciales del MSE (Forma Matricial) ---
+\begin{frame}{Regresión Lineal: Derivadas del MSE (IV-B)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Recordando la forma matricial:}
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| X\mathbf{w} + b\mathbf{1}_n - \mathbf{y} \|_2^2
+\]
+
+
+\textbf{Gradientes vectoriales:}
+\[
+\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} X^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\]
+\[
+\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \mathbf{1}_n^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\]
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+% --- Frame 1: Condiciones de Optimalidad ---
+\begin{frame}{Regresión Lineal: Condiciones del Mínimo Analítico (V-A)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Condición de óptimo (mínimo global):}
+\[
+\nabla_{\mathbf{w}} \mathcal{L} = 0, \qquad \frac{\partial \mathcal{L}}{\partial b} = 0
+\]
+
+\textbf{Sustituyendo y simplificando:}
+\[
+X^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y}) = 0
+\]
+\[
+\mathbf{1}_n^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y}) = 0
+\]
+
+Estas dos ecuaciones conforman el \textbf{sistema normal de mínimos cuadrados}.
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 1: Condiciones y despeje de b ---
+\begin{frame}{Regresión Lineal: Sistema Normal y Despeje de \(b\) (V-B1)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Expandiendo el sistema:}
+\[
+\begin{cases}
+X^\top X \mathbf{w} + b X^\top \mathbf{1}_n = X^\top \mathbf{y} \\
+\mathbf{1}_n^\top X \mathbf{w} + b \mathbf{1}_n^\top \mathbf{1}_n = \mathbf{1}_n^\top \mathbf{y}
+\end{cases}
+\]
+
+\textbf{Solución cerrada para los parámetros:}
+\[
+\boxed{\mathbf{w}^* = (X^\top H X)^{-1} X^\top H \mathbf{y}}
+\]
+\[
+\boxed{b^* = \bar{y} - (\mathbf{w}^*)^\top \bar{\mathbf{x}}}
+\]
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Solución Analítica Explícita ---
+\begin{frame}{Regresión Lineal: Solución Analítica del MSE (V-B2)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Donde:}
+\[
+H = I_n - \frac{1}{n}\mathbf{1}_n \mathbf{1}_n^\top, \qquad
+\bar{\mathbf{x}} = \frac{1}{n} X^\top \mathbf{1}_n \in \mathbb{R}^m, \qquad
+\bar{y} = \frac{1}{n} \mathbf{1}_n^\top \mathbf{y} \in \mathbb{R}
+\]
+
+
+\textbf{Interpretación:}
+\begin{itemize}
+  \item \(\mathbf{w}^*\) es la solución de \textbf{mínimos cuadrados ordinarios (OLS)}.
+  \item \(b^*\) compensa el desplazamiento medio de los datos.
+  \item Esta solución coincide con el mínimo global del error cuadrático.
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+% --- Frame 1: Descenso del Gradiente (Principio) ---
+\begin{frame}{Descenso del Gradiente: Principio General (VI-A)}
+\begin{columns}
+\begin{column}{0.95\textwidth}
+
+\textbf{Objetivo:} minimizar una función de costo diferenciable \(J(\mathbf{w}, b)\) ajustando iterativamente los parámetros.
+
+\[
+\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \eta \, \nabla_{\mathbf{w}} \mathcal{L}(\mathbf{w}^{(t)}, b^{(t)})
+\]
+\[
+b^{(t+1)} = b^{(t)} - \eta \, \frac{\partial \mathcal{L}(\mathbf{w}^{(t)}, b^{(t)})}{\partial b}
+\]
+
+donde:
+\begin{itemize}
+  \item \(\eta > 0\) es la \textbf{tasa de aprendizaje} usualmente $\eta = 0.01$.
+  \item \(\nabla_{\mathbf{w}} \mathcal{L}\) y \(\frac{\partial \mathcal{L}}{\partial b}\) indican la dirección de máximo incremento de \(J\).
+  \item Restarlas implementa el \textbf{descenso} hacia el mínimo.
+\end{itemize}
+
+\textbf{Criterio de parada:} 
+\[
+\|\nabla \mathcal{L}(\mathbf{w}^{(t)}, b^{(t)})\|_2 < \varepsilon \quad \text{o} \quad t \geq t_{\max}
+\]
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+% --- Frame 2: Descenso del Gradiente para el MSE ---
+\begin{frame}{Descenso del Gradiente: Minimización del Error Cuadrático Medio (VI-B)}
+\begin{columns}
+\begin{column}{0.70\textwidth}
+
+\textbf{Función de costo:}
+\[
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| X\mathbf{w} + b\mathbf{1}_n - \mathbf{y} \|_2^2
+\]
+
+\textbf{Gradientes:}
+\[
+\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} X^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\]
+\[
+\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \mathbf{1}_n^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\]
+
+\textbf{Actualización iterativa:}
+\[
+\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \frac{2\eta}{n} X^\top (X\mathbf{w}^{(t)} + b^{(t)}\mathbf{1}_n - \mathbf{y})
+\]
+\[
+b^{(t+1)} = b^{(t)} - \frac{2\eta}{n} \mathbf{1}_n^\top (X\mathbf{w}^{(t)} + b^{(t)}\mathbf{1}_n - \mathbf{y})
+\]
+
+\end{column}
+
+\begin{column}{0.35\textwidth}
+  \begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{images/gradient-decent.png}
+  \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame Único: Métricas de Evaluación en Regresión ---
+\begin{frame}{Evaluación del Modelo: Métricas en Regresión (VIII)}
+\begin{columns}
+
+% ----- Columna Izquierda -----
+\begin{column}{0.48\textwidth}
+
+\textbf{Error Absoluto Medio (MAE)}
+\[
+MAE = \frac{1}{n} \sum_{i=1}^{n} |\hat{y}_i - y_i|
+\]
+
+\vspace{1em}
+
+\textbf{Error Porcentual Absoluto Medio (MAPE)}
+\[
+MAPE = \frac{100}{n} \sum_{i=1}^{n}
+\left| \frac{y_i - \hat{y}_i}{y_i} \right|
+\]
+
+\end{column}
+
+% ----- Columna Derecha -----
+\begin{column}{0.48\textwidth}
+
+\textbf{Error Cuadrático Medio (MSE)}
+\[
+MSE = \frac{1}{n} \sum_{i=1}^{n} (\hat{y}_i - y_i)^2
+\]
+
+\vspace{1em}
+
+\textbf{Coeficiente de Determinación (\(R^2\))}
+\[
+R^2 =
+1 -
+\frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}
+     {\sum_{i=1}^{n} (y_i - \bar{y})^2}
+\]
+
+\end{column}
+
+\end{columns}
+\end{frame}
+
+
+\section{Funciónes de Activación}
+
+% --- Frame 1: Función Sigmoide ---
+\begin{frame}{Función de Activación: Sigmoide (IX-A)}
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+\textbf{Definición:}  
+Función no lineal que comprime la entrada en el rango \((0,1)\), comúnmente usada en modelos probabilísticos y neuronas binarias.
+
+\[
+\sigma(x) = \frac{1}{1 + e^{-x}}
+\]
+
+\textbf{Aplicaciones:}
+\begin{itemize}
+  \item Clasificación binaria $p(y=1|x)$.
+  \item Capa de salida en regresión logística.
+  \item Modelos donde se requiere una interpretación probabilística.
+\end{itemize}
+\end{column}
+
+\begin{column}{0.42\textwidth}
+\centering
+\vspace{1em}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/sigmoide.png}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Función ReLU ---
+\begin{frame}{Función de Activación: ReLU (IX-B)}
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+\textbf{Definición:}  
+Activa solo valores positivos de la entrada, anulando los negativos. Introduce no linealidad con bajo costo computacional.
+
+\[
+\text{ReLU}(x) = \max(0, x)
+\]
+
+\textbf{Aplicaciones:}
+\begin{itemize}
+  \item Capas ocultas en redes neuronales profundas (DNN, CNN).
+  \item Mejora la convergencia del entrenamiento.
+  \item Evita el problema de saturación del gradiente.
+\end{itemize}
+\end{column}
+
+\begin{column}{0.42\textwidth}
+\centering
+% \vspace{1em}
+% \includegraphics[width=0.9\textwidth]{images/relu.png}
+% \caption{Curva de la función ReLU.}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/relu.png}
+\end{figure}
+\end{column}
+
+\end{columns}
+\end{frame}
+
+
+% --- Frame 4: Función Softmax ---
+\begin{frame}{Función de Activación: Softmax (IX-D)}
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+\textbf{Definición:}  
+Convierte un vector de valores reales en una distribución de probabilidad sobre \(K\) clases.
+
+\[
+\text{softmax}(x_i) = 
+\frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}}
+\]
+
+\textbf{Aplicaciones:}
+\begin{itemize}
+  \item Capa de salida en clasificación multiclase.
+  \item Modelos probabilísticos como redes neuronales bayesianas.
+  \item Permite interpretar la salida como \(p(y = k | x)\).
+\end{itemize}
+\end{column}
+
+\begin{column}{0.42\textwidth}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/softmax.png}
+\end{figure}
+\end{column}
+
+\end{columns}
+\end{frame}
+
+\section{Capas de una Red Neuronal}
+
+% --- Frame 1: Extensión de una Neurona a una Capa ---
+\begin{frame}{Capas de una Red Neuronal: Formulación Matricial (I)}
+
+En una neurona individual, la operación lineal se define como:
+
+\[
+\hat{\mathbf{y}} = X \mathbf{w} + \mathbf{b}
+\]
+
+
+\[
+  \begin{bmatrix}
+  \hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  x_{11} & x_{12} & \dots & x_{1m} \\
+  x_{21} & x_{22} & \dots & x_{2m} \\
+  \vdots & \vdots & \ddots & \vdots \\
+  x_{n1} & x_{n2} & \dots & x_{nm}
+  \end{bmatrix}
+  \begin{bmatrix}
+  w_1 \\ w_2 \\ \vdots \\ w_m
+  \end{bmatrix}
+  +
+  b
+  \begin{bmatrix}
+  1 \\ 1 \\ \vdots \\ 1
+  \end{bmatrix}
+\]
+
+
+\end{frame}
+
+
+
+
+% --- Frame 1: Extensión de una Neurona a una Capa ---
+\begin{frame}{Capas de una Red Neuronal: Formulación Matricial (II)}
+
+Consideremos una capa completamente conectada que recibe como entrada una matriz de datos:
+\[
+\mathbf{X} \in \mathbb{R}^{n \times m},
+\]
+donde:
+\begin{itemize}
+  \item \(n\): número de observaciones (filas),
+  \item \(m\): número de características (columnas).
+\end{itemize}
+
+La capa posee \(k\) neuronas, cada una con un conjunto de \(m\) pesos y un sesgo.  
+Por tanto, los parámetros de la capa se representan como:
+\[
+\mathbf{W} \in \mathbb{R}^{m \times k}, \qquad \mathbf{b} \in \mathbb{R}^{k}.
+\]
+
+El modelo lineal de la capa se expresa matricialmente como:
+\[
+\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b},
+\]
+donde \(\mathbf{Z} \in \mathbb{R}^{n \times k}\) contiene las salidas (pre-activaciones) de las \(k\) neuronas para las \(n\) observaciones.
+
+
+\end{frame}
+
+
+% --- Frame 2: Extensión de una Neurona a una Capa ---
+\begin{frame}{Capas de una Red Neuronal: Formulación Matricial (III)}
+
+\[
+\begin{bmatrix}
+\hat{y}_{11} & \hat{y}_{12} & \dots & \hat{y}_{1k} \\
+\hat{y}_{21} & \hat{y}_{22} & \dots & \hat{y}_{2k} \\
+\vdots & \vdots & \ddots & \vdots \\
+\hat{y}_{n1} & \hat{y}_{n2} & \dots & \hat{y}_{nk}
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_{11} & x_{12} & \dots & x_{1m} \\
+x_{21} & x_{22} & \dots & x_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{n1} & x_{n2} & \dots & x_{nm}
+\end{bmatrix}
+\begin{bmatrix}
+w_{11} & w_{12} & \dots & w_{1k} \\
+w_{21} & w_{22} & \dots & w_{2k} \\
+\vdots & \vdots & \ddots & \vdots \\
+w_{m1} & w_{m2} & \dots & w_{mk}
+\end{bmatrix}
++
+\begin{bmatrix}
+b_1 & b_2 & \dots & b_k \\
+b_1 & b_2 & \dots & b_k \\
+\vdots & \vdots & \ddots & \vdots \\
+b_1 & b_2 & \dots & b_k
+\end{bmatrix}
+\]
+
+Ahora pasamos $\mathbf{Z}$ por una función de activación $a(\mathbf{Z})$ 
+para obtener la salida final de la capa.
+
+\[ \hat{\mathbf{Y}} = a(\mathbf{Z}) \]
+
+\end{frame}
+
+
+
+% --- Frame 3: Red Neuronal como Composición de Funciones ---
+\begin{frame}{Red Neuronal como Composición de Funciones (I)}
+
+Una red neuronal puede interpretarse matemáticamente como una \textbf{composición de funciones}.  
+Cada capa transforma su entrada mediante una combinación lineal seguida de una función de activación no lineal.
+
+Para una red con \(L\) capas, cada una definida por:
+\[
+\mathbf{X}^{(l)} = a^{(l)}\left(\mathbf{Z}^{(l)}\right), \qquad
+\mathbf{Z}^{(l)} = \mathbf{X}^{(l-1)} \mathbf{W}^{(l)} + \mathbf{b}^{(l)}
+\]
+donde:
+\begin{itemize}
+  \item \(\mathbf{W}^{(l)} \in \mathbb{R}^{m_{l-1} \times m_l}\): pesos de la capa \(l\),
+  \item \(\mathbf{b}^{(l)} \in \mathbb{R}^{m_l}\): sesgos,
+  \item \(a^{(l)}(\cdot)\): función de activación de la capa \(l\).
+  \item \(\mathbf{X}^{(l)} \in \mathbb{R}^{n \times m_l}\): salida de la capa \(l\).
+\end{itemize}
+
+\end{frame}
+
+
+% --- Frame 4: Red Neuronal como Composición de Funciones ---
+\begin{frame}{Red Neuronal como Composición de Funciones (II)}
+
+En forma más explícita, la salida de la red para una entrada \(\mathbf{X}\) se obtiene aplicando sucesivamente las transformaciones de cada capa:
+
+\[
+\begin{aligned}
+\mathbf{X}^{(1)} &= a^{(1)}\left( \mathbf{Z}^{(1)} \right) = a^{(1)}\left(\mathbf{X}\mathbf{W}^{(1)} + \mathbf{b}^{(1)}\right), \\
+&\vdots \\
+\mathbf{X}^{(L-1)} &=  a^{(L-1)}\left( \mathbf{Z}^{(L-2)} \right) = a^{(L-1)}\left(\mathbf{X}^{(L-2)}\mathbf{W}^{(L-2)} + \mathbf{b}^{(L-2)}\right), \\
+\hat{\mathbf{Y}} &= a^{(L)}\left( \mathbf{Z}^{(L)} \right) = a^{(L)}\left(\mathbf{X}^{(L-1)}\mathbf{W}^{(L)} + \mathbf{b}^{(L)}\right).
+\end{aligned}
+\]
+
+De esta forma, una red neuronal profunda implementa una función compuesta:
+
+\[
+\hat{\mathbf{Y}} = f(\mathbf{X}; \Theta)
+= (a^{(L)} \circ \mathbf{Z}^{(L)} \circ \dots \circ a^{(1)} \circ \mathbf{Z}^{(1)})(\mathbf{X}),
+\]
+donde \(\Theta = \{\mathbf{W}^{(l)}, \mathbf{b}^{(l)}\}_{l=1}^{L}\) representa el conjunto total de parámetros del modelo.
+
+\end{frame}
+
+
+
+% --- Frame 5: Retropropagación (I) ---
+\begin{frame}{Retropropagación: Cálculo de Gradientes (I)}
+
+El objetivo del entrenamiento es minimizar una función de pérdida \( \mathcal{L}(\hat{\mathbf{Y}}, \mathbf{Y}) \) respecto a los parámetros \( \Theta = \{\mathbf{W}^{(l)}, \mathbf{b}^{(l)}\}_{l=1}^L \).
+
+Dado que la red es una composición de funciones,
+\[
+\hat{\mathbf{Y}} = f(\mathbf{X}; \Theta)
+= a^{(L)}(\mathbf{Z}^{(L)}) = a^{(L)}( \mathbf{X}^{(L-1)}\mathbf{W}^{(L)} + \mathbf{b}^{(L)} ),
+\]
+aplicamos la \textbf{regla de la cadena} para propagar los gradientes desde la salida hacia las capas anteriores.
+
+Para la capa \(L\):
+\[
+\delta^{(L)} = \frac{\partial \mathcal{L}}{\partial \mathbf{Z}^{(L)}}
+= \frac{\partial \mathcal{L}}{\partial \hat{\mathbf{Y}}} \odot a'^{(L)}(\mathbf{Z}^{(L)}),
+\]
+donde \( \odot \) denota el producto elemento a elemento.
+
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(L)}} = (\mathbf{X}^{(L-1)})^\top \delta^{(L)}, \qquad
+\frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(L)}} = \sum_i \delta^{(L)}_i.
+\]
+
+\end{frame}
+
+
+% --- Frame 6: Retropropagación (II) ---
+\begin{frame}{Retropropagación: Cálculo de Gradientes (II)}
+
+Para las capas ocultas \( l = L-1, L-2, \dots, 1 \), los gradientes se propagan hacia atrás utilizando:
+
+\[
+\delta^{(l)} = \left( \delta^{(l+1)} (\mathbf{W}^{(l+1)})^\top \right) \odot a'^{(l)}(\mathbf{Z}^{(l)}),
+\]
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}} = (\mathbf{X}^{(l-1)})^\top \delta^{(l)}, \qquad
+\frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(l)}} = \sum_i \delta^{(l)}_i.
+\]
+
+Este procedimiento se repite recursivamente desde la capa de salida hasta la capa de entrada, actualizando los parámetros según descenso del gradiente:
+
+\[
+\mathbf{W}^{(l)} \leftarrow \mathbf{W}^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}}, \qquad
+\mathbf{b}^{(l)} \leftarrow \mathbf{b}^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{b}^{(l)}},
+\]
+donde \( \eta \) es la tasa de aprendizaje.
+
+\end{frame}
+
+
+\section{Introducción a sorix}
+
+% --- Frame 7: Retos para Construir un Framework Minimalista ---
+\begin{frame}{Retos para construir un Framework Minimalista}
+
+\textbf{Principales retos identificados:}
+\begin{itemize}
+  \item \textbf{Vincular matemáticas y programación:} llevar la formulación teórica de la composición de funciones y la retropropagación a código ejecutable.
+  \item \textbf{Eficiencia numérica:} garantizar operaciones vectorizadas y cálculo de gradientes sin pérdida de rendimiento.
+  \item \textbf{Portabilidad y escalabilidad:} permitir la ejecución del mismo código tanto en CPU como en GPU.
+  \item \textbf{Modularidad:} diseñar una arquitectura flexible que permita incorporar nuevas funciones y capas sin modificar el núcleo.
+  \item \textbf{Usabilidad y claridad:} ofrecer una interfaz de programación simple, cercana a los paradigmas de bibliotecas modernas de ML.
+\end{itemize}
+\end{frame}
+
+
+% --- Frame 8: Solución: Sorix, Un Motor de ML Minimalista ---
+\begin{frame}{Solución: Sorix, Un Motor de ML Minimalista}
+
+\begin{itemize}
+  \item \textbf{Sorix: Biblioteca de Aprendizaje Automático desde Cero}
+  \begin{itemize}
+    \item Diseñada para ofrecer \textbf{control de bajo nivel} y máxima eficiencia.
+    \item Disponible públicamente a través de \textbf{PyPI}(pip install sorix).
+  \end{itemize}
+
+  \item \textbf{Arquitectura de Alto Rendimiento}
+  \begin{itemize}
+    \item \textbf{Core}: Implementación propia y limpia de \textbf{Autograd} (Diferenciación Automática).
+    \item \textbf{Backend CPU}: Construido sobre \textbf{NumPy}.
+    \item \textbf{Backend GPU}: Soporte nativo mediante \textbf{CuPy} para aceleración masiva.
+  \end{itemize}
+
+  \item \textbf{Usabilidad}
+  \begin{itemize}
+    \item Proporciona una \textbf{API similar a PyTorch}, lo que facilita el prototipado rápido y la migración de código existente.
+  \end{itemize}
+\end{itemize}
+
+
+\end{frame}
+
+\section{Autograd}
+
+
+\begin{frame}{Concepto de Autodiferenciación}
+  \begin{block}{Definición}
+    La autodiferenciación calcula derivadas exactas mediante la aplicación sistemática de la \textbf{regla de la cadena} sobre un grafo computacional dinámico.
+  \end{block}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/autograd-foward.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Implementación del Autograd en Sorix}
+  \begin{block}{Estructura de la clase \texttt{tensor}}
+  Cada instancia de \texttt{tensor} constituye un nodo en el grafo computacional y contiene:
+  \begin{itemize}
+    \item \textbf{data}: arreglo numérico definido sobre $\mathbb{R}$, $\mathbb{R}^N$ o $\mathbb{R}^{M\times N}$.
+    \item \textbf{requires\_grad}: Determina si el tensor participa en el cálculo de gradientes.
+    \item \textbf{grad}: tensor del mismo orden que \texttt{data}, donde se acumulan los gradientes durante la retropropagación.
+    \item \textbf{operaciones}: conjunto de transformaciones matemáticas definidas sobre el tensor (suma, producto, activaciones, etc.).
+    \item \textbf{\_op}: La operación que se utilizo para generarlo.
+    \item \textbf{\_prev}: referencias a los tensores padres utilizados para generar el nodo actual.
+    \item \textbf{backward}: función local que define la regla de derivación asociada a la operación realizada.
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{clase tensor en Sorix}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/clase-tensor.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Operaciones con Autograd en Sorix(foward)}
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/sorix-add-method.png}
+  \end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Retropropagación Automática en Sorix(backward)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/sorix-bacward.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Control del Grafo: sorix.no\_grad()}
+  \begin{block}{Modo sin gradientes}
+    Durante inferencia o validación, el grafo no se construye:
+  \end{block}
+
+  \lstset{style=pythonstyle}
+  \begin{lstlisting}
+with sorix.no_grad():
+    pred = model(x_val) 
+  \end{lstlisting}
+
+  \begin{itemize}
+    \item \textbf{sorix.no\_grad()}: controla la variable global \textbf{\_autograd\_enabled}.
+    \item Ahorra memoria y acelera la ejecución.
+    \item Equivalente a \texttt{torch.no\_grad()} en PyTorch.
+  \end{itemize}
+\end{frame}
+
+
+% ——————————————————————————
+\section{Ejecución en GPU}
+
+\begin{frame}[fragile]{Usando la GPU: NumPy vs CuPy}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \textbf{CPU – NumPy}
+      \begin{lstlisting}
+import numpy as np
+x = np.random.randn(1000000)
+y = np.exp(x)
+      \end{lstlisting}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \textbf{GPU – CuPy}
+      \begin{lstlisting}
+import cupy as cp
+x = cp.random.randn(1000000)
+y = cp.exp(x)
+      \end{lstlisting}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.6cm}
+  \begin{center}
+    \textbf{cambiando np y cp por xp}
+    \begin{lstlisting}
+xp = cp if (device == 'gpu' and _cupy_available) else np
+    \end{lstlisting}
+  \end{center}
+\end{frame}
+
+
+\section{Machine Learning con Sorix}
+
+\begin{frame}{Entrenamiento de una Red Neuronal en Sorix}
+  \centering
+  \includegraphics[width=0.4\textwidth]{images/sorix-nn-example.png}
+
+  \vspace{0.5em}
+  \footnotesize
+  \textbf{Ejemplo:} Entrenamiento de una red neuronal en Sorix.  
+  \href{https://colab.research.google.com/github/Mitchell-Mirano/sorix/blob/main/examples/nn/2.2-classification-multiple.ipynb}{\textcolor{blue}{Abrir en Google Colab}}
+\end{frame}
+
+
+
+\begin{frame}{Repositorio de Sorix en \texttt{https://github.com/Mitchell-Mirano/sorix}}
+  \begin{columns}[T,onlytextwidth]
+    % --- Columna izquierda: lista de objetivos ---
+    \begin{column}{0.55\textwidth}
+      \begin{itemize}
+        \item Explorar más ejemplos de \textbf{Machine Learning} con \texttt{Sorix}.
+        \item Profundizar en el uso de \textbf{Autograd} para redes neuronales.
+        \item Contribuir activamente al desarrollo del proyecto.
+      \end{itemize}
+    \end{column}
+
+    % --- Columna derecha: QR del repositorio ---
+    \begin{column}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.75\textwidth]{images/sorix-repo.png}
+      \vspace{0.3cm}
+
+      \small Escanea el código QR para acceder al repositorio.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[plain]
+  \centering
+  \vfill
+  {\bfseries\fontsize{36pt}{40pt}\selectfont ¡Gracias por su atención!}\\[1.5em]
+  {\fontsize{20pt}{24pt}\selectfont Preguntas o comentarios son bienvenidos.}
+  \vfill
+\end{frame}
+
+\end{document}
