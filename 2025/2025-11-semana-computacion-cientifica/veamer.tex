@@ -383,7 +383,7 @@ z = \sum_{i=1}^{n} w_i x_i + b
   \item Se modela una variable de salida \(y \in \mathbb{R}\) a partir de una única variable de entrada \(x \in \mathbb{R}\).
   \item La relación se expresa como:
   \[
-  \hat{y} = w_1 x + b
+  \hat{y} = z = w_1 x + b
   \]
   donde \(w_1\) representa la pendiente y \(b\) el intercepto.
 \end{itemize}
@@ -392,7 +392,7 @@ z = \sum_{i=1}^{n} w_i x_i + b
 \begin{itemize}
   \item Se extiende el modelo a \(n\) variables de entrada:
   \[
-  \hat{y} = \sum_{i=1}^{n} w_i x_i + b = \mathbf{w}^\top \mathbf{x} + b
+  \hat{y} = z = \sum_{i=1}^{n} w_i x_i + b = \mathbf{w}^\top \mathbf{x} + b
   \]
   \item Cada \(w_i\) representa la contribución lineal de la característica \(x_i\) a la variable objetivo \(y\).
 \end{itemize}
@@ -408,12 +408,12 @@ z = \sum_{i=1}^{n} w_i x_i + b
 El modelo lineal para \(n\) observaciones y \(m\) características se expresa como:
 
 \[
-\hat{\mathbf{y}} = X \mathbf{w} + \mathbf{b}
+\hat{\mathbf{y}} = \mathbf{z}= \mathbf{X} \mathbf{w} + \mathbf{b}
 \]
 
 donde:
 \begin{itemize}
-  \item \(X \in \mathbb{R}^{n \times m}\): matriz de diseño o entradas.
+  \item \(\mathbf{X} \in \mathbb{R}^{n \times m}\): matriz de diseño o entradas.
   \item \(\mathbf{w} \in \mathbb{R}^{m}\): vector de parámetros o pesos.
   \item \(\mathbf{b} \in \mathbb{R}^{n}\): vector de sesgos o bias.
   \item \(\hat{\mathbf{y}} \in \mathbb{R}^{n}\): vector de valores predichos.
@@ -456,7 +456,7 @@ El objetivo es estimar los parámetros \(\mathbf{w}\) y \(b\) que minimicen la d
 
 \textbf{Sustituyendo el modelo lineal:}
 \[
-\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \mathbf{w}^\top \mathbf{x}_i + b - y_i \right)^2
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \mathbf{w}^\top \mathbf{X}_i + b - y_i \right)^2
 \]
 
 \textbf{Interpretación:}
@@ -477,13 +477,12 @@ El objetivo es estimar los parámetros \(\mathbf{w}\) y \(b\) que minimicen la d
 
 \textbf{Forma Matricial:}
 \[
-\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| X\mathbf{w} + b\mathbf{1}_n - \mathbf{y} \|_2^2
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| \mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y} \|_2^2
 \]
-
+ 
 \textbf{Donde:}
 \begin{itemize}
   \item \(X \in \mathbb{R}^{n \times m}\) es la matriz de diseño.
-  \item \(\mathbf{1}_n\) es un vector columna de unos (\(n \times 1\)).
   \item \(\mathbf{y}\) es el vector de salidas reales.
 \end{itemize}
 
@@ -499,12 +498,12 @@ El objetivo es estimar los parámetros \(\mathbf{w}\) y \(b\) que minimicen la d
 
 \textbf{Función de costo:}
 \[
-\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \mathbf{w}^\top \mathbf{x}_i + b - y_i \right)^2
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \sum_{i=1}^{n} \left( \mathbf{w}^\top \mathbf{X}_i + b - y_i \right)^2
 \]
 
 Sea el error para el ejemplo \(i\)-ésimo:
 \[
-e_i = \hat{y}_i - y_i = \mathbf{w}^\top \mathbf{x}_i + b - y_i
+e_i = \hat{y}_i - y_i = \mathbf{w}^\top \mathbf{X}_i + b - y_i
 \]
 
 Entonces:
@@ -514,7 +513,7 @@ Entonces:
 
 \textbf{Derivadas parciales:}
 \[
-\frac{\partial \mathcal{L}}{\partial w_j} = \frac{2}{n} \sum_{i=1}^{n} e_i \, x_{ij}
+\frac{\partial \mathcal{L}}{\partial w_j} = \frac{2}{n} \sum_{i=1}^{n} e_i \, \mathbf{X}_{ij}
 \qquad
 \frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \sum_{i=1}^{n} e_i
 \]
@@ -531,17 +530,22 @@ Entonces:
 
 \textbf{Recordando la forma matricial:}
 \[
-\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| X\mathbf{w} + b\mathbf{1}_n - \mathbf{y} \|_2^2
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| \mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y} \|_2^2
 \]
 
 
 \textbf{Gradientes vectoriales:}
 \[
-\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} X^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} \mathbf{X}^\top (\mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y})
 \]
 \[
-\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \mathbf{1}_n^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \mathbf{1}_n^\top (\mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y})
 \]
+
+Donde:
+\begin{itemize}
+  \item \(\mathbf{1}_n\) es el vector de unos en \(\mathbb{R}^n\).
+\end{itemize}
 
 \end{column}
 \end{columns}
@@ -560,12 +564,24 @@ Entonces:
 \]
 
 \textbf{Sustituyendo y simplificando:}
-\[
-X^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y}) = 0
+% \[
+% X^\top(\mathbf{X}\mathbf{w} + \mathf{b} - \mathbf{y}) = 0
+% \]
+% \[
+% \mathbf{1}_n^\top (\mathbf{X}\mathbf{w} + \mathf{b} - \mathbf{y}) = 0
+% \]
+
+\[ 
+\mathbf{X}^\top(\mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y}) = 0
 \]
+
 \[
-\mathbf{1}_n^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y}) = 0
+\mathbf{1}_n^\top (\mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y}) = 0
 \]
+
+% \[
+% \mathbf{1}_n^\top X \mathbf{w} + b \mathbf{1}_n^\top \mathbf{1}_n = \mathbf{1}_n^\top \mathbf{y}
+% \]
 
 Estas dos ecuaciones conforman el \textbf{sistema normal de mínimos cuadrados}.
 
@@ -582,14 +598,14 @@ Estas dos ecuaciones conforman el \textbf{sistema normal de mínimos cuadrados}.
 \textbf{Expandiendo el sistema:}
 \[
 \begin{cases}
-X^\top X \mathbf{w} + b X^\top \mathbf{1}_n = X^\top \mathbf{y} \\
-\mathbf{1}_n^\top X \mathbf{w} + b \mathbf{1}_n^\top \mathbf{1}_n = \mathbf{1}_n^\top \mathbf{y}
+\mathbf{X}^\top \mathbf{X}\mathbf{w} + b \mathbf{X}^\top = \mathbf{X}^\top \mathbf{y} \\
+\mathbf{1}_n^\top \mathbf{X} \mathbf{w} + b\mathbf{1}_n^\top = \mathbf{1}_n^\top \mathbf{y}
 \end{cases}
 \]
 
 \textbf{Solución cerrada para los parámetros:}
 \[
-\boxed{\mathbf{w}^* = (X^\top H X)^{-1} X^\top H \mathbf{y}}
+\boxed{\mathbf{w}^* = \mathbf{(X^\top H X)^{-1} X^\top H}\mathbf{y}}
 \]
 \[
 \boxed{b^* = \bar{y} - (\mathbf{w}^*)^\top \bar{\mathbf{x}}}
@@ -607,8 +623,8 @@ X^\top X \mathbf{w} + b X^\top \mathbf{1}_n = X^\top \mathbf{y} \\
 
 \textbf{Donde:}
 \[
-H = I_n - \frac{1}{n}\mathbf{1}_n \mathbf{1}_n^\top, \qquad
-\bar{\mathbf{x}} = \frac{1}{n} X^\top \mathbf{1}_n \in \mathbb{R}^m, \qquad
+\mathbf{H} = I_n - \frac{1}{n}\mathbf{1}_n \mathbf{1}_n^\top, \qquad
+\bar{\mathbf{x}} = \frac{1}{n} \mathbf{X}^\top \mathbf{1}_n \in \mathbb{R}^m, \qquad
 \bar{y} = \frac{1}{n} \mathbf{1}_n^\top \mathbf{y} \in \mathbb{R}
 \]
 
@@ -631,7 +647,7 @@ H = I_n - \frac{1}{n}\mathbf{1}_n \mathbf{1}_n^\top, \qquad
 \begin{columns}
 \begin{column}{0.95\textwidth}
 
-\textbf{Objetivo:} minimizar una función de costo diferenciable \(J(\mathbf{w}, b)\) ajustando iterativamente los parámetros.
+\textbf{Objetivo:} minimizar una función de costo diferenciable \(\mathcal{L}(\mathbf{w}, b)\) ajustando iterativamente los parámetros.
 
 \[
 \mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \eta \, \nabla_{\mathbf{w}} \mathcal{L}(\mathbf{w}^{(t)}, b^{(t)})
@@ -666,23 +682,23 @@ donde:
 
 \textbf{Función de costo:}
 \[
-\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| X\mathbf{w} + b\mathbf{1}_n - \mathbf{y} \|_2^2
+\mathcal{L}(\mathbf{w}, b) = \frac{1}{n} \| \mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y} \|_2^2
 \]
 
 \textbf{Gradientes:}
 \[
-\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} X^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\nabla_{\mathbf{w}} \mathcal{L} = \frac{2}{n} \mathbf{X}^\top (\mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y})
 \]
 \[
-\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \mathbf{1}_n^\top (X\mathbf{w} + b\mathbf{1}_n - \mathbf{y})
+\frac{\partial \mathcal{L}}{\partial b} = \frac{2}{n} \mathbf{1}_n^\top (\mathbf{X}\mathbf{w} + \mathbf{b} - \mathbf{y})
 \]
 
 \textbf{Actualización iterativa:}
 \[
-\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \frac{2\eta}{n} X^\top (X\mathbf{w}^{(t)} + b^{(t)}\mathbf{1}_n - \mathbf{y})
+\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \frac{2\eta}{n} \mathbf{X}^\top (\mathbf{X}\mathbf{w}^{(t)} + \mathbf{b}^{(t)} - \mathbf{y})
 \]
 \[
-b^{(t+1)} = b^{(t)} - \frac{2\eta}{n} \mathbf{1}_n^\top (X\mathbf{w}^{(t)} + b^{(t)}\mathbf{1}_n - \mathbf{y})
+b^{(t+1)} = b^{(t)} - \frac{2\eta}{n} \mathbf{1}_n^\top (\mathbf{X}\mathbf{w}^{(t)} + \mathbf{b}^{(t)} - \mathbf{y})
 \]
 
 \end{column}
@@ -851,29 +867,28 @@ Convierte un vector de valores reales en una distribución de probabilidad sobre
 En una neurona individual, la operación lineal se define como:
 
 \[
-\hat{\mathbf{y}} = X \mathbf{w} + \mathbf{b}
+\hat{\mathbf{y}} = \mathbf{z} = \mathbf{X} \mathbf{w} + \mathbf{b}
 \]
 
 
 \[
-  \begin{bmatrix}
-  \hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  x_{11} & x_{12} & \dots & x_{1m} \\
-  x_{21} & x_{22} & \dots & x_{2m} \\
-  \vdots & \vdots & \ddots & \vdots \\
-  x_{n1} & x_{n2} & \dots & x_{nm}
-  \end{bmatrix}
-  \begin{bmatrix}
-  w_1 \\ w_2 \\ \vdots \\ w_m
-  \end{bmatrix}
-  +
-  b
-  \begin{bmatrix}
-  1 \\ 1 \\ \vdots \\ 1
-  \end{bmatrix}
+\begin{bmatrix}
+\hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_{11} & x_{12} & \dots & x_{1m} \\
+x_{21} & x_{22} & \dots & x_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{n1} & x_{n2} & \dots & x_{nm}
+\end{bmatrix}
+\begin{bmatrix}
+w_1 \\ w_2 \\ \vdots \\ w_m
+\end{bmatrix}
++
+\begin{bmatrix}
+b \\ b \\ \vdots \\ b
+\end{bmatrix}
 \]
 
 
@@ -898,12 +913,12 @@ donde:
 La capa posee \(k\) neuronas, cada una con un conjunto de \(m\) pesos y un sesgo.  
 Por tanto, los parámetros de la capa se representan como:
 \[
-\mathbf{W} \in \mathbb{R}^{m \times k}, \qquad \mathbf{b} \in \mathbb{R}^{k}.
+\mathbf{W} \in \mathbb{R}^{m \times k}, \qquad \mathbf{B} \in \mathbb{R}^{nxk}.
 \]
 
 El modelo lineal de la capa se expresa matricialmente como:
 \[
-\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b},
+\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{B},
 \]
 donde \(\mathbf{Z} \in \mathbb{R}^{n \times k}\) contiene las salidas (pre-activaciones) de las \(k\) neuronas para las \(n\) observaciones.
 
@@ -916,10 +931,10 @@ donde \(\mathbf{Z} \in \mathbb{R}^{n \times k}\) contiene las salidas (pre-activ
 
 \[
 \begin{bmatrix}
-\hat{y}_{11} & \hat{y}_{12} & \dots & \hat{y}_{1k} \\
-\hat{y}_{21} & \hat{y}_{22} & \dots & \hat{y}_{2k} \\
+z_{11} & z_{12} & \dots & z_{1k} \\
+z_{21} & z_{22} & \dots & z_{2k} \\
 \vdots & \vdots & \ddots & \vdots \\
-\hat{y}_{n1} & \hat{y}_{n2} & \dots & \hat{y}_{nk}
+z_{n1} & z_{n2} & \dots & z_{nk}
 \end{bmatrix}
 =
 \begin{bmatrix}
