@@ -38,7 +38,7 @@ Below is a list of the conferences included in this repository. Each entry provi
 
 ## 2025 – Scientific Computing Week (UNMSM)
 
-* **Directory**: [2025-11-semana-computacion-cientifica](https://github.com/Mitchell-Mirano/mmirano-talks/tree/main/2025/2025-11-semana-computacion-cientifica)
+* **Directory**: [2025-11-semana-computacion-cientifica](https://github.com/Mitchell-Mirano/mmirano-talks/tree/main/2025/semana-computacion-cientifica)
 
 * **Title**: *Beyond PyTorch: Building a Machine Learning Engine with NumPy and CuPy*
 * **Language**: Spanish (ES)
