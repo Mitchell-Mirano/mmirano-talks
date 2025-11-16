@@ -1,0 +1,18 @@
+[project]
+name = "mmirano-talks"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "graphviz>=0.21",
+    "matplotlib>=3.10.7",
+    "networkx>=3.5",
+    "pandas>=2.3.3",
+    "sorix[cp13]>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]
