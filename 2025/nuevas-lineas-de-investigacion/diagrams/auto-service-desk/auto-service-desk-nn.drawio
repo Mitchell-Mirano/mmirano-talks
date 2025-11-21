@@ -1,0 +1,58 @@
+<mxfile host="65bd71144e">
+    <diagram id="me3G6wAmu2rlMfVuKhrW" name="Page-1">
+        <mxGraphModel dx="3065" dy="1615" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="67" style="edgeStyle=none;html=1;strokeWidth=5;" edge="1" parent="1" source="65" target="66">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="65" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://static.simonwillison.net/static/2023/embeddings/embeddings.003.jpeg;clipPath=inset(20.41% 26% 5.62% 29%);" parent="1" vertex="1">
+                    <mxGeometry x="-146" y="141" width="504.34" height="466.9814814814814" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.ibm.com/content/dam/connectedassets-adobe-cms/worldwide-content/cdp/cf/ul/g/3a/b8/ICLH_Diagram_Batch_01_03-DeepNeuralNetwork.png;clipPath=inset(12.72% 14% 13.91% 13%);" vertex="1" parent="1">
+                    <mxGeometry x="454.0026611328125" y="54.99980560302737" width="1120" height="634.1552511415525" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;" vertex="1" parent="1">
+                    <mxGeometry x="1760" y="80" width="73" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;" vertex="1" parent="1">
+                    <mxGeometry x="1765" y="400" width="73" height="80.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="95" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;" vertex="1" parent="1">
+                    <mxGeometry x="1765" y="550" width="78" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: rgb(255, 255, 255);&quot;&gt;Andy&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;fillColor=default;fontSize=20;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="1771.5" y="170" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="97" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: rgb(255, 255, 255);&quot;&gt;Ivan&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;fontSize=20;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="1781.5" y="490" width="45" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="98" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: rgb(255, 255, 255);&quot;&gt;Eva&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;fontSize=20;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="1784" y="320" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="99" value="&lt;font face=&quot;Times New Roman, serif&quot;&gt;&lt;span style=&quot;white-space-collapse: preserve; background-color: rgb(255, 255, 255);&quot;&gt;Erin&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;fontStyle=1;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="1786.5" y="640" width="35" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="104" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;" vertex="1" parent="1">
+                    <mxGeometry x="1762.5" y="250" width="80.5" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="106" style="edgeStyle=none;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="66" target="92">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="107" style="edgeStyle=none;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="66" target="104">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="108" style="edgeStyle=none;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="66" target="93">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="109" style="edgeStyle=none;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="66" target="95">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="110" value="Embeddings" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="-66" y="43" width="238" height="80" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
