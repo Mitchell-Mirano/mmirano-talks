@@ -50,6 +50,23 @@ Below is a list of the conferences included in this repository. Each entry provi
 * **Description**: Academic lecture focused on the mathematical and computational construction of [sorix](https://github.com/Mitchell-Mirano/sorix), a minimalist machine learning engine implemented using [NumPy](https://numpy.org/) and [CuPy](https://cupy.dev/). The talk covers the formal foundations of autograd, neural network architecture, and optimization principles required to design a high-performance framework capable of running on both CPU and GPU.
 
 
+
+## 2025 – New Lines of Research (UNMSM)
+
+* **Directory**: [2025-11-new-lines-of-research](https://github.com/Mitchell-Mirano/mmirano-talks/tree/main/2025/nuevas-lineas-de-investigacion)
+
+* **Title**: *From Physics to Machine Learning: Applications in Industrial Process Prediction and Optimization*
+
+* **Language**: Spanish (ES)
+
+* **Date**: November 21, 2025
+
+* **Institution**: [Faculty of Physical Sciences – UNMSM](https://fisica.unmsm.edu.pe/)
+
+* **Description**: Academic lecture focused on the connection between fundamental physics principles and machine learning. The session covered the mathematical foundations of ML, modeling paradigms, and its formulation as an optimization problem. Two real industrial case studies were presented (IT request classification and operational time prediction in concrete logistics), demonstrating quantitative improvements through supervised models and deep learning techniques. Finally, it examined how physical concepts such as energy, diffusion, symmetries, and the principle of least action support the modern design of ML architectures and training algorithms.
+
+
+
 ## Compiling Presentations
 
 Navigate to the event directory:
