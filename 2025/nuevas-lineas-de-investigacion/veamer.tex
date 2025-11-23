@@ -1,0 +1,1192 @@
+\documentclass[11pt,aspectratio=169]{beamer}
+
+% ——————————————————————————
+% TEMA: MADRID (Formal)
+\usetheme{Madrid}
+% Uso del color por defecto para el tema Madrid.
+% \usecolortheme{structure} % Si se usa Madrid, lo mejor es omitir o usar color themes básicos.
+
+% --- AÑADIR SÍMBOLOS DE NAVEGACIÓN (Controles de Avance/Retroceso) ---
+% Esto añade los símbolos de navegación en la esquina inferior derecha.
+% En el tema Madrid, se añaden automáticamente si no se desactivan.
+\setbeamertemplate{navigation symbols}{} % Se desactiva el pie de página por defecto de Madrid
+\setbeamertemplate{navigation symbols}[horizontal] % y se fuerzan los símbolos de navegación en una barra separada
+
+% ——————————————————————————
+% PAQUETES Y AJUSTES VISUALES
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}        % Paquete esencial para \includegraphics
+\usepackage{booktabs}        % tablas elegantes
+\usepackage{tikz}            % diagramas vectoriales
+\usepackage{listings}        % código fuente
+\usepackage{xcolor}
+\usepackage{caption}         % Permite el uso de \captionof, aunque se usan \begin{figure}
+\usepackage{hyperref}
+
+% ——————————————————————————
+% ENLACES Y COLORES
+% Mantenemos los colores. En el tema Madrid, estos colores se aplicarán a la barra superior,
+% títulos de sección, bloques y texto destacado.
+\definecolor{mainblue}{HTML}{003366} % Azul oscuro
+\definecolor{mainaccent}{HTML}{CFAE70} % Dorado/Ocre
+
+% Configurar los colores del tema Madrid para usar nuestros colores formales.
+\setbeamercolor{palette primary}{bg=mainblue, fg=white}
+\setbeamercolor{palette secondary}{bg=mainaccent, fg=black}
+\setbeamercolor{palette tertiary}{bg=mainblue!80, fg=white}
+\setbeamercolor{section in head/foot}{bg=mainblue, fg=white}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=mainblue,
+  urlcolor=mainblue % Unificar el color de los URLs a azul oscuro.
+}
+
+% ——————————————————————————
+% CONFIGURACIÓN DE CÓDIGO PYTHON
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!5},
+  frame=single,
+  rulecolor=\color{gray!60},
+  keywordstyle=\color{blue!80!black}\bfseries,
+  stringstyle=\color{green!40!black},
+  commentstyle=\color{gray!60}\itshape,
+  showstringspaces=false,
+  breaklines=true,
+  tabsize=4,
+  captionpos=b
+}
+
+% ——————————————————————————
+% PLANTILLAS VISUALES PERSONALIZADAS
+% Se eliminan las plantillas de Metropolis que no aplican a Madrid,
+% y se mantiene la configuración de color para la página de sección
+% usando los ajustes de \setbeamercolor anteriores.
+\setbeamerfont{section title}{size=\Large,series=\bfseries}
+
+% ——————————————————————————
+% INFORMACIÓN DE LA PONENCIA
+\title[De la física al aprendizaje automático]{De la física al aprendizaje automático: Aplicaciones en la predicción y optimización de procesos industriales}
+\author[Mitchell Mirano]{\textbf{Mitchell Mirano}} 
+\institute[UNMSM]{Facultad de Ciencias Fisicas – UNMSM} 
+\date[21 nov 2025]{\textbf{21 de noviembre de 2025}}
+
+% ——————————————————————————
+\begin{document}
+
+\maketitle
+
+% Tabla de contenido (Madrid ya tiene un estilo de TOC formal)
+\begin{frame}{Contenido}
+  \tableofcontents
+\end{frame}
+
+
+% ——————————————————————————
+\section{Fundamentos de Inteligencia Artificial}
+
+
+\begin{frame}{Fundamentos de Inteligencia Artificial}
+  \begin{columns}
+    \begin{column}{0.65\textwidth}
+      \begin{itemize}
+        \item[1.] \textbf{Inteligencia Artificial (IA)}
+        \begin{itemize}
+          \item Disciplina general que busca desarrollar sistemas capaces de razonar, planificar o tomar decisiones.
+          \item Ejemplos: planificación automática, agentes inteligentes, lógica de primer orden.
+        \end{itemize}
+
+        \item[2.] \textbf{Aprendizaje Automático (Machine Learning)}
+        \begin{itemize}
+          \item Subcampo de la IA basado en modelos matemáticos que \textbf{aprenden patrones a partir de datos}.
+          \item Requiere un conjunto de entrenamiento y un mecanismo de optimización.
+        \end{itemize}
+
+        \item[3.] \textbf{Deep Learning / Redes Neuronales}
+        \begin{itemize}
+          \item Variante del aprendizaje automático basada en arquitecturas de múltiples capas.
+          \item Capaz de modelar \textbf{relaciones no lineales complejas} en espacios de alta dimensión.
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.35\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{images/deep learning.png}
+      \captionof{figure}{IA $\supset$ ML $\supset$ Deep Learning}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
+  \centering
+  \vspace{1cm}
+  {\Large \textbf{Paradigmas del Aprendizaje Automático}} \\[0.5cm]
+  {\normalsize ¿Cómo aprenden las máquinas a partir de los datos?}
+\end{frame}
+
+
+
+% ——————————————————————————
+% INICIO DE LOS FRAMES INDIVIDUALES DE TIPOS DE ML
+% ——————————————————————————
+
+\begin{frame}{Aprendizaje Supervisado: Regresión}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Predecir una \textbf{variable continua}, es decir, un número real dentro de un rango.
+      \end{block}
+
+      \vspace{1em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Finanzas:} Estimación de precios de vivienda o acciones.
+        \item \textbf{Medio Ambiente:} Predicción de la temperatura o niveles de polución.
+        \item \textbf{Comercio:} Proyecciones detalladas de ventas futuras.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % 
+        \includegraphics[width=0.95\textwidth]{images/hiperplane.png}
+        \caption{Modelo prediciendo valores continuos.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Aprendizaje Supervisado: Clasificación}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Asignar una instancia a una \textbf{categoría o clase discreta} predefinida.
+      \end{block}
+
+      \vspace{1em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Seguridad:} Detección de *spam* (Clase A) vs. *No-spam* (Clase B).
+        \item \textbf{Medicina:} Diagnóstico binario (enfermo/sano).
+        \item \textbf{Visión:} Reconocimiento de dígitos o de objetos en imágenes.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % 
+        \includegraphics[width=0.95\textwidth]{images/classification.png}
+        \caption{Separación de datos en clases discretas.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Aprendizaje No Supervisado: Clustering (Agrupamiento)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Identificar \textbf{grupos o estructuras naturales} en los datos. Es un problema de Aprendizaje \textbf{No Supervisado}.
+      \end{block}
+
+      \vspace{1em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Marketing:} Segmentación de clientes basada en comportamiento de compra.
+        \item \textbf{Investigación:} Agrupamiento automático de documentos o artículos científicos.
+        \item \textbf{Análisis de Datos:} Detección de anomalías o *outliers*.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % 
+        \includegraphics[width=0.95\textwidth]{images/clustering.png}
+        \caption{Identificación de estructuras sin etiquetas previas.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Aprendizaje por Refuerzo (RL)}
+  \begin{columns}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición}
+        \textbf{Objetivo:} Entrenar un \textbf{agente} para tomar decisiones secuenciales en un entorno, maximizando una \textbf{recompensa} acumulada.
+      \end{block}
+
+      \vspace{0.5em}
+      \textbf{Aplicaciones Comunes}
+      \begin{itemize}
+        \item \textbf{Robótica:} Control y navegación autónoma.
+        \item \textbf{Finanzas:} Optimización de carteras de inversión.
+        \item \textbf{Juegos:} Desarrollo de IA que supera a humanos (e.g., AlphaGo).
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{figure}
+        \centering
+        % Se recomienda usar una imagen de un agente interactuando con su entorno (e.g., un diagrama de un loop de RL).
+        \includegraphics[width=0.95\textwidth]{images/RL.png} 
+        \caption{Diagrama del ciclo de interacción en RL.}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}{Algoritmos Comunes por Paradigma de Aprendizaje}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \textbf{Aprendizaje Supervisado}
+      \begin{itemize}
+        \item \underline{Regresión}
+        \begin{itemize}
+          \item Regresión Lineal (OLS)
+          \item Árboles de Decisión (CART)
+          \item LightGBM / XGBoost
+          \item Redes Neuronales (MLP)
+          \item Support Vector Regression (SVR)
+        \end{itemize}
+        \item \underline{Clasificación}
+        \begin{itemize}
+          \item Regresión Logística
+          \item SVM (Support Vector Machine)
+          \item Random Forest / Gradient Boosting
+          \item LightGBM / XGBoost
+          \item Redes Neuronales (Softmax)
+          \item Transformers (para clasificación avanzada)
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \textbf{Aprendizaje No Supervisado}
+      \begin{itemize}
+        \item Clustering
+        \begin{itemize}
+          \item K-means
+          \item DBSCAN
+          \item Gaussian Mixture Models (GMM)
+        \end{itemize}
+        \item Reducción de Dimensión
+        \begin{itemize}
+          \item PCA
+          \item t-SNE
+          \item Autoencoders
+        \end{itemize}
+      \end{itemize}
+
+      \vspace{0.5em}
+      \textbf{Aprendizaje por Refuerzo}
+      \begin{itemize}
+        \item Q-Learning
+        \item Deep Q-Networks (DQN)
+        \item Proximal Policy Optimization (PPO)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}{Comparativa de Complejidad vs Potencial de los Algoritmos}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/complejidad-modelos.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{ML como un Problema de Optimización}
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+El aprendizaje automático se formula como la minimización de una \textbf{función de pérdida}
+$\mathcal{L}(y, \hat{y})$, la cual cuantifica la discrepancia entre la predicción del modelo
+$\hat{y} = f(x;\theta)$ y el valor observado $y$:
+
+\[
+\theta^* = \underset{\theta}{\arg\min} \ \mathcal{L}(y, f(x;\theta))
+\]
+
+donde $\theta$ representa los parámetros del modelo y $f(x;\theta)$ la función predictiva.
+
+\vspace{0.35cm}
+\textbf{Analogía física:}
+\begin{itemize}
+    \item La función de pérdida actúa como el \textit{potencial del sistema}.
+    \item El aprendizaje equivale a una búsqueda hacia el \textbf{estado de mínima energía},
+    análogo al equilibrio termodinámico.
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\textwidth}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{images/energia.png}
+\end{figure}
+\end{column}
+
+\end{columns}
+\end{frame}
+
+
+
+
+\section{Casos de Optimización de Procesos Industriales}
+
+\begin{frame}
+  \centering
+  \vspace{1cm}
+  {\Large \textbf{Casos de optimización de procesos industriales}} \\[0.5cm]
+  {\normalsize ¿Que problemas pueden ser resueltos con ML?}
+\end{frame}
+
+
+\begin{frame}{Caso 1:ARPL - Auto Service Desk}
+  Los colaboradores de las empresas del Grupo UNACEM solicitan soporte técnico y
+  soluciones informáticas mediante correos enviados a la mesa de servicio. Estos
+  mensajes son registrados en la plataforma KACE y posteriormente asignados por
+  un analista a un especialista de ARPL, según la naturaleza del incidente.
+
+  \vspace{0.5em}
+
+  \textbf{Limitaciones del proceso actual:}
+  \begin{itemize}
+    \item La asignación se realiza de forma manual, generando tiempos de espera
+          promedio de \textbf{30 minutos por caso}.
+    \item El analista frecuentemente se encuentra atendiendo otras actividades,
+          lo que incrementa los tiempos de respuesta.
+    \item El alto volumen de correos diarios retrasa el análisis y clasificación.
+    \item Según la criticidad del incidente, la atención debe ejecutarse en un
+          rango de \textbf{4 a 8 horas hábiles} para no afectar la continuidad
+          operativa.
+  \end{itemize}
+
+  \vspace{0.5em}
+  Este contexto evidencia la necesidad de automatizar la etapa de análisis y 
+  asignación de solicitudes para mejorar la eficiencia y reducir tiempos de atención.
+\end{frame}
+
+
+
+\begin{frame}{Diagrama del Problema}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/auto-service-desk/auto-service-desk.png}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{Solución con ML(Clasificación de texto)}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/auto-service-desk/auto-service-desk-sol.png}
+    \caption{Cada 5 minutos se se buscan correos en la plataforma KACE y se clasifican.}
+  \end{figure}
+  
+\end{frame}
+
+
+\begin{frame}{Clasificador de Texto(Vectorización)}
+  Utilizamos el modelo pre-entrenado de embeddings de \href{https://huggingface.co/}{Hugging Face} 
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diagrams/auto-service-desk/auto-service-desk-vectorizacion.png}
+    \caption{Convertimos los 24 mil  correos historicos en vectores de 512 dimensiones.}
+  \end{figure}
+  
+\end{frame}
+
+
+\begin{frame}{Clasificador de Texto(Clasificación de vectores)}
+  Entrenamos una red neuronal  que identifique quien va a atender el correo en base a los vectores de 512 dimensiones. 
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diagrams/auto-service-desk/auto-service-desk-nn.png}
+    \caption{La red neuronal identifica quien va a atender el correo.}
+  \end{figure}
+  
+\end{frame}
+
+\begin{frame}{Neurona Artificial: Definición e Inspiración}
+  
+  \begin{block}{Definición}
+    Es la unidad fundamental de las Redes Neuronales, diseñada para simular el proceso de \textbf{activación e inhibición} de las neuronas biológicas. Su función principal es recibir señales y producir una única salida.
+  \end{block}
+  \vspace{-0.5em} 
+  
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/neuronas.png} 
+    \vspace{-0.7em}
+    \caption{Paralelo entre neurona biológica y unidad artificial.}
+  \end{figure}
+\end{frame}
+
+
+% --- Frame 1: Definición y combinación lineal ---
+\begin{frame}{Neurona Artificial: Combinación Lineal (I)}
+\begin{columns}
+\begin{column}{0.9\textwidth}
+
+\textbf{Suma Ponderada (\(z\)): Fundamento de la Neurona}
+
+\begin{block}{Definición Vectorial}
+La activación interna o señal integrada (\(z\)) se calcula como el \textbf{producto escalar} entre el vector de pesos 
+\(\mathbf{w} \in \mathbb{R}^n\) y el vector de entrada 
+\(\mathbf{x} \in \mathbb{R}^n\), más un término escalar de sesgo (\(b \in \mathbb{R}\)):
+\end{block}
+
+\[
+\hat{y} = z = \mathbf{w}^\top \mathbf{x} + b
+\]
+
+\textbf{Interpretación Matemática:}
+\begin{itemize}
+  \item \(z\) representa una \textbf{combinación lineal} de las entradas ponderadas por sus pesos.
+  \item El sesgo \(b\) introduce un desplazamiento adicional que evita la restricción de pasar por el origen.
+  \item Este modelo constituye la base de toda red neuronal feed-forward.
+\end{itemize}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 1: Extensión de una Neurona a una Capa ---
+\begin{frame}{Neurona Artificial: Formulación Matricial (I)}
+
+operación matricial den dentro de una para $\mathbf{X}(datos) \in \mathbb{R}^{n \times m}$
+
+\[
+\hat{\mathbf{y}} = \mathbf{z} = \mathbf{X} \mathbf{w} + \mathbf{b}
+\]
+
+
+\[
+\begin{bmatrix}
+\hat{y}_1 \\ \hat{y}_2 \\ \vdots \\ \hat{y}_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_{11} & x_{12} & \dots & x_{1m} \\
+x_{21} & x_{22} & \dots & x_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{n1} & x_{n2} & \dots & x_{nm}
+\end{bmatrix}
+\begin{bmatrix}
+w_1 \\ w_2 \\ \vdots \\ w_m
+\end{bmatrix}
++
+\begin{bmatrix}
+b \\ b \\ \vdots \\ b
+\end{bmatrix}
+\]
+
+En nuestro caso n=24 000 correos y m=512 dimensiones de los embeddings.
+
+\end{frame}
+
+
+
+% --- Frame 2: Extensión de una Neurona a una Capa ---
+\begin{frame}{Capa de una Red Neuronal: Formulación Matricial (II)}
+
+Calculos en una capa de una red neuronal para $\mathbf{X}(datos) \in \mathbb{R}^{n \times m}$ 
+con k neuronas por tanto $\mathbf{W}(pesos) \in \mathbb{R}^{m \times k}$ y el vector de sesgos $\mathbf{B}(sesgos) \in \mathbb{R}^{n \times k}$
+
+\[
+\begin{bmatrix}
+z_{11} & z_{12} & \dots & z_{1k} \\
+z_{21} & z_{22} & \dots & z_{2k} \\
+\vdots & \vdots & \ddots & \vdots \\
+z_{n1} & z_{n2} & \dots & z_{nk}
+\end{bmatrix}
+=
+\begin{bmatrix}
+x_{11} & x_{12} & \dots & x_{1m} \\
+x_{21} & x_{22} & \dots & x_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{n1} & x_{n2} & \dots & x_{nm}
+\end{bmatrix}
+\begin{bmatrix}
+w_{11} & w_{12} & \dots & w_{1k} \\
+w_{21} & w_{22} & \dots & w_{2k} \\
+\vdots & \vdots & \ddots & \vdots \\
+w_{m1} & w_{m2} & \dots & w_{mk}
+\end{bmatrix}
++
+\begin{bmatrix}
+b_1 & b_2 & \dots & b_k \\
+b_1 & b_2 & \dots & b_k \\
+\vdots & \vdots & \ddots & \vdots \\
+b_1 & b_2 & \dots & b_k
+\end{bmatrix}
+\]
+
+Ahora pasamos $\mathbf{Z}$ por una función de activación $a(\mathbf{Z})$ 
+para obtener la salida final de la capa.
+
+\[ \hat{\mathbf{Y}} = a(\mathbf{Z}) = a(\mathbf{X} \mathbf{W} + \mathbf{B}) \in \mathbb{R}^{n \times k} \]
+
+Que se convertirá en la entrada de la capa siguiente.
+
+\end{frame}
+
+
+% --- Frame 1: Función Sigmoide ---
+\begin{frame}{Función de Activación: Sigmoide }
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+\textbf{Definición:}  
+Función no lineal que comprime la entrada en el rango \((0,1)\), comúnmente usada en modelos probabilísticos y neuronas binarias.
+
+\[
+\sigma(x) = \frac{1}{1 + e^{-x}}
+\]
+
+\textbf{Aplicaciones:}
+\begin{itemize}
+  \item Clasificación binaria $p(y=1|x)$.
+  \item Capa de salida en regresión logística.
+  \item Modelos donde se requiere una interpretación probabilística.
+\end{itemize}
+\end{column}
+
+\begin{column}{0.42\textwidth}
+\centering
+\vspace{1em}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/sigmoide.png}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+% --- Frame 2: Función ReLU ---
+\begin{frame}{Función de Activación: ReLU}
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+\textbf{Definición:}  
+Activa solo valores positivos de la entrada, anulando los negativos. Introduce no linealidad con bajo costo computacional.
+
+\[
+\text{ReLU}(x) = \max(0, x)
+\]
+
+\textbf{Aplicaciones:}
+\begin{itemize}
+  \item Capas ocultas en redes neuronales profundas (DNN, CNN).
+  \item Mejora la convergencia del entrenamiento.
+  \item Evita el problema de saturación del gradiente.
+\end{itemize}
+\end{column}
+
+\begin{column}{0.42\textwidth}
+\centering
+% \vspace{1em}
+% \includegraphics[width=0.9\textwidth]{images/relu.png}
+% \caption{Curva de la función ReLU.}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/relu.png}
+\end{figure}
+\end{column}
+
+\end{columns}
+\end{frame}
+
+
+% --- Frame 4: Función Softmax ---
+\begin{frame}{Función de Activación: Softmax}
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+\textbf{Definición:}  
+Convierte un vector de valores reales en una distribución de probabilidad sobre \(K\) clases.
+
+\[
+\text{softmax}(x_i) = 
+\frac{e^{x_i}}{\sum_{j=1}^{K} e^{x_j}}
+\]
+
+\textbf{Aplicaciones:}
+\begin{itemize}
+  \item Capa de salida en clasificación multiclase.
+  \item Modelos probabilísticos como redes neuronales bayesianas.
+  \item Permite interpretar la salida como \(p(y = k | x)\).
+\end{itemize}
+\end{column}
+
+\begin{column}{0.42\textwidth}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/softmax.png}
+\end{figure}
+\end{column}
+
+\end{columns}
+\end{frame}
+
+
+% --- Frame 4: Red Neuronal como Composición de Funciones ---
+\begin{frame}{Red Neuronal como Composición de Funciones (II)}
+
+En forma más explícita, la salida de la red neuronal 
+para una entrada \(\mathbf{X} \in \mathbb{R}^{n \times m}\) y $c$ categorias
+se obtiene aplicando sucesivamente las transformaciones de cada capa:
+
+\[
+\begin{aligned}
+\mathbf{X}^{(1)} &= a^{(1)}\left( \mathbf{Z}^{(1)} \right) = a^{(1)}\left(\mathbf{X}\mathbf{W}^{(1)} + \mathbf{b}^{(1)}\right), \\
+&\vdots \\
+\mathbf{X}^{(L-1)} &=  a^{(L-1)}\left( \mathbf{Z}^{(L-2)} \right) = a^{(L-1)}\left(\mathbf{X}^{(L-2)}\mathbf{W}^{(L-2)} + \mathbf{b}^{(L-2)}\right), \\
+\hat{\mathbf{Y}} &= Softmax\left( \mathbf{Z}^{(L)} \right) = a^{(L)}\left(\mathbf{X}^{(L-1)}\mathbf{W}^{(L)} + \mathbf{b}^{(L)}\right) \in \mathbb{R}^{n \times c}.
+\end{aligned}
+\]
+
+Por tanto debemos asegurarnos que los pesos de la capa de salida \(\mathbf{W}^{(L)} \in \mathbb{R}^{L_x \times c}\)
+
+Donde:
+\begin{itemize}
+  \item \(L_x\) es el numero de neuronas de la cap anterior.
+  \item \(c\) es el número de categorías o clases.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Prediciendo quien va a atender el correo}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=1\textwidth,height=0.45\textheight]{images/salida-nn.png}
+  \caption{Quien va a atender el correo es el que tiene mayor probabilidad.}
+\end{figure}
+\end{frame}
+
+
+% ---------------- Frame: Función de error - Entropía cruzada categórica ---------------
+\begin{frame}{Función de pérdida: Entropía cruzada categórica}
+\begin{columns}
+  \begin{column}{0.95\textwidth}
+    \textbf{Definición (una muestra):} dada una distribución objetivo \(y = (y_1,\dots,y_K)\) (p.ej. one-hot) y la predicción de la red \(p = (p_1,\dots,p_K)\) (resultado de \(\mathrm{softmax}\)), la \emph{entropía cruzada} se define como
+    \[
+      \mathcal{L}_{CE}(y,p) \;=\; -\sum_{k=1}^{K} y_k \log p_k .
+    \]
+    Para un conjunto de \(n\) muestras usamos el promedio:
+    \[
+      \mathcal{L}_{CE} \;=\; -\frac{1}{n}\sum_{i=1}^n \sum_{k=1}^K y_{i,k}\log p_{i,k}.
+    \]
+
+
+    Ahora solo quieda optimizar $\mathcal{L}$ para encontrar los mejores $W(pesos)$ y $B(sesgos)$.
+
+  \end{column}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Retos Encontrados en el Proceso}
+  \begin{itemize}
+    \item Rotación temporal del personal especializado (vacaciones o ausencias).
+    \item Distribución desequilibrada de correos entre especialistas.
+    \item Restricciones en la asignación por empresa (no todos pueden atender todos los casos).
+    \item Cambios de puesto o reasignación de especialistas a nuevas funciones.
+  \end{itemize}
+
+  \vspace{0.5em}
+  \begin{block}{Impacto}
+    Estos factores generan sesgos en el modelo de clasificación, pérdida de precisión
+    y riesgo de asignaciones incorrectas o ineficientes.
+  \end{block}
+\end{frame}
+
+
+\begin{frame}{Estrategias de Solución}
+  \begin{columns}
+
+    \begin{column}{0.48\textwidth}
+      \textbf{Soluciones vía ML y datos}
+      \begin{itemize}
+        \item Agrupación de especialistas por perfil funcional
+              (DBA, soporte IT, aplicaciones, ciberseguridad).
+        \item Reentrenamiento del modelo con balanceo de clases
+              para corregir sesgos de asignación.
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.52\textwidth}
+      \textbf{Soluciones vía lógica o software adicional}
+      \begin{itemize}
+        \item Validación de disponibilidad según vacaciones o ausencia.
+        \item Restricción dinámica de especialistas por empresa.
+      \end{itemize}
+    \end{column}
+
+  \end{columns}
+
+  \vspace{0.8em}
+  \centering
+  {\small\textit{No todos los requerimientos son satisfechos con soluciones vía ML y datos.}}
+\end{frame}
+
+\begin{frame}{Resultados del Modelo de Clasificación}
+
+  \begin{block}{Eficiencia Operativa}
+    \begin{itemize}
+      \item \textbf{Reducción del tiempo de asignación:}  
+            de 30 minutos (manual) a \textbf{5 minutos} (automatizado).  
+            \textbf{→ 83\% de mejora en velocidad de respuesta.}
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{Efectividad del Modelo}
+    \begin{itemize}
+      \item \textbf{Precisión de clasificación:} 93\% en la asignación del correo al especialista adecuado.
+      \item \textbf{Generalización robusta} frente a variaciones lingüísticas en los correos (gracias al uso de embeddings).
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}{Caso 2: UNICON - Optimización de la Programación}
+  El sistema actual de programación \textit{(Command Series)}, 
+  encargado de gestionar los pedidos de concreto, 
+  no incorpora variables estadísticas del comportamiento del cliente. 
+  Actualmente, la programación se basa en tiempos estimados a partir 
+  del historial de despachos(promedios) y del volumen solicitado, 
+  sin considerar dinámicas operativas reales.
+
+  \vspace{0.4cm}
+  \textbf{Limitaciones identificadas:}
+  \begin{itemize}
+    \item Los pedidos pueden ser cancelados o modificados (volumen ajustado) sin capacidad predictiva.
+    \item La estimación temporal carece de precisión, generando retrasos en la llegada de los mixers a obra y planta.
+    \item Esto ocasiona una \textbf{no atención del 15\% del volumen programado}, impactando negativamente en la productividad y la puntualidad con los clientes.
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Diagrama del proceso antes del despacho}
+  Cada dia unicon recibe aproximadamente 500 pedidos de concreto.
+  El personal del area de programación recibe los requerimientos de los clientes
+  y los transforma en una programación en el software Command Series.
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{diagrams/optimizacion-prog/opt-prog-problem.png}
+  \end{figure}
+  
+\end{frame}
+
+
+\begin{frame}{Los requerimientos del pedido del cliente}
+
+ \begin{itemize}
+  \item \textbf{Volumen} de concreto: 50 $m^3$.
+  \item \textbf{Fecha} de entrega: 22 de noviembre del 2025.
+  \item \textbf{Hora} de inicio del despacho: 9:00 AM.
+  \item \textbf{Producto} concreto 230 kg/m$^3$(resistencia).
+  \item \textbf{Lugar} de entrega: UNMSM - FCF.
+  \item \textbf{Espaciamiento} entre mixers: 30 minutos.
+ \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{La programación del pedido}
+
+  Para programar el requerimiento primero se debe decidir desde que planta se 
+  realizara el despacho:\href{https://maps.app.goo.gl/sZ5855dCkwLnngju7}{Planta Materiales}
+  y cuanto tiempo se tarda en llegar desde la planta a la obra segun google maps. 
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c c c c c c c c c}
+\hline
+\textbf{$m^3$} & \textbf{Ini carga} & \textbf{Fin carga} & \textbf{A obra} & \textbf{Lleg. obr} & \textbf{Ini desc} & \textbf{Fin desc} & \textbf{A pta} & \textbf{Lleg pta} \\
+\hline
+8 & 08:15 & 08:23 & 08:30 & 09:00 & 09:15 & 09:45 & 09:55 & 10:25 \\
+8 & 08:45 & 08:53 & 09:00 & 09:30 & 09:45 & 10:15 & 10:25 & 10:55 \\
+8 & 09:15 & 09:23 & 09:30 & 10:00 & 10:15 & 10:45 & 10:55 & 11:25 \\
+8 & 09:45 & 09:53 & 10:00 & 10:30 & 10:45 & 11:15 & 11:25 & 11:55 \\
+8 & 10:15 & 10:23 & 10:30 & 11:00 & 11:15 & 11:45 & 11:55 & 12:25 \\
+6 & 10:45 & 10:53 & 11:00 & 11:30 & 11:45 & 12:15 & 12:25 & 12:55 \\
+4 & 11:15 & 11:23 & 11:30 & 12:00 & 12:15 & 12:45 & 12:55 & 13:25 \\
+\hline
+\end{tabular}
+\end{table}
+  
+\end{frame}
+
+
+\begin{frame}{Programación de muchos pedidos}
+
+  Unicon atiende al dia mas de 500 pedidos de concreto. Distribuidos en sus mas de 30
+  plantas de despacho. El personal de programación debe programar todos los requerimientos
+  y la final se obtiene el siguiente grafico.
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/cms-prog.png}
+    \caption{El grafico muestra cuantos camiones se necestan cada 30 mins listos para despachar.}
+  \end{figure}
+  
+\end{frame}
+
+\begin{frame}{Solución con ML (Regresión para predecir cada intervalo de tiempo)}
+Lo que se buscaba era una solución que permitiera predecir el tiempo de llegada a planta.
+Para ello entrenamos un modelo especializado en predecir la duración de cada intervalo de tiempo.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l l l}
+\hline
+\textbf{Intervalo} & \textbf{Modelo} & \textbf{Algoritmo} \\
+\hline
+Lleg. obr - A obra & Modelo de: Viaje a obra & RandomForestRegressor \\
+Ini desc - Lleg. obr & Modelo de: TEO & RandomForestRegressor \\
+Fin desc - Ini desc & Modelo de: Descarga & RandomForestRegressor \\
+A pta - Fin desc & Modelo de: Salida Obra & RandomForestRegressor \\
+Lleg pta - A pta & Modelo de: Regreso a planta & RandomForestRegressor \\
+\hline
+\end{tabular}
+\caption{Intervalos operativos, modelo asociado y algoritmo recomendado.}
+\end{table}
+
+
+\end{frame}
+
+
+\begin{frame}{Función de pérdida: Error cuadrático medio (MSE)}
+\begin{columns}
+% -------- Columna izquierda --------
+\begin{column}{0.55\textwidth}
+El \textbf{Error Cuadrático Medio (MSE)} es una función de pérdida utilizada en problemas de regresión para cuantificar la discrepancia entre los valores reales y las predicciones del modelo. Se define como:
+
+\[
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+\]
+
+donde:
+\begin{itemize}
+    \item $y_i$ es el valor observado,
+    \item $\hat{y}_i$ es el valor predicho por el modelo,
+    \item $n$ es el número total de observaciones.
+\end{itemize}
+
+\end{column}
+
+% -------- Columna derecha --------
+\begin{column}{0.45\textwidth}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{images/error-cuadratico.png}
+  \caption{Representación gráfica del error cuadrático}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}{El Árbol de Regresión}
+Un \textbf{árbol de regresión} divide recursivamente el espacio de variables predictoras con el objetivo de minimizar el error cuadrático medio (MSE). En cada iteración, se evalúa un punto de partición $s$ y se selecciona aquel que produce la menor suma de errores dentro de cada región.
+
+\[
+\text{División óptima} = \arg\min_{s} \left(
+\sum_{y_i \in R_1(s)} (y_i - \bar{y}_{R_1})^2 +
+\sum_{y_i \in R_2(s)} (y_i - \bar{y}_{R_2})^2
+\right)
+\]
+
+donde:
+\begin{itemize}
+    \item $R_1(s)$ y $R_2(s)$ son los subconjuntos generados por la división,
+    \item $\bar{y}_{R_j}$ es la media de los valores objetivo en la región $R_j$.
+\end{itemize}
+
+El proceso continúa de forma jerárquica hasta que se cumple un criterio de parada (profundidad máxima, número mínimo de observaciones o mejora marginal insuficiente).
+\end{frame}
+
+\begin{frame}{Árbol de Regresión — Representación Visual}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{images/arbol.png}
+  \caption{Estructura simplificada de un árbol de regresión.}
+\end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}{Random Forest Regressor}
+\begin{columns}
+  \begin{column}{0.55\textwidth}
+    El \textbf{Random Forest Regressor} es un modelo de ensamble formado 
+    por múltiples árboles de regresión, entrenados sobre subconjuntos aleatorios 
+    tanto de los datos como de las variables en cada partición. 
+
+    La predicción final se obtiene como el promedio de las predicciones 
+    individuales de los árboles:
+    \[
+    \hat{y} = \frac{1}{T} \sum_{t=1}^{T} \hat{y}^{(t)}
+    \]
+    donde $T$ es el número total de árboles.
+
+  \end{column}
+
+  \begin{column}{0.45\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{images/random-forest.png}
+      \caption{Esquema de Random Forest Regressor.}
+    \end{figure}
+  \end{column}
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}{Variables usadas durante el entrenamiento e importancia de las mismas}
+\begin{center}
+\begin{tabular}{ll | ll}
+\textbf{Variable} & \textbf{Importancia} & \textbf{Variable} & \textbf{Importancia} \\
+\hline
+load\_num & 13.87\% & lag\_1 & 8.73\% \\
+load\_size & 7.45\% & lag\_3 & 7.44\% \\
+lag\_2 & 7.37\% & last\_day\_avg & 5.12\% \\
+plant\_code & 4.99\% & last\_week\_day\_avg & 4.99\% \\
+hour & 4.92\% & day\_of\_month & 3.97\% \\
+last\_week\_avg & 3.89\% & truck\_spacing\_mins & 3.89\% \\
+minute & 3.41\% & week & 2.97\% \\
+last\_month\_avg & 2.82\% & structure & 2.28\% \\
+day\_of\_week & 2.11\% & seg\_obr & 1.45\% \\
+is\_first\_dispatch & 1.36\% & prod\_cat & 1.23\% \\
+month & 1.19\% & building & 1.16\% \\
+schd\_truck\_type & 1.15\% & bomb\_type & 1.02\% \\
+turn & 0.71\% & is\_with\_bomb & 0.49\% \\
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Retos encontrados en el Proceso}
+
+\begin{itemize}
+  \item Datos nulos y faltantes.
+  \item Datos inconsistentes (tiempos negativos).
+  \item En el momento del despacho el mixer programado puede cambiar.
+  \item En cliente puede cancelar el pedido.
+  \item El cliente puede ajustar el volumen solicitado.
+  \item La obra no empieza a la hora indicada.
+  \item El cliente secuestra los mixers.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Resultados obtenidos: Error programación manual(CMS) vs ML}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth, height=0.7\textheight]{images/error-cms -vs-modelo.png}
+    \caption{Error manual(Azul) vs Error ML(Amarillo).}
+  \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Resultados obtenidos:Comportamiento Programado vs Predicho vs Real}
+
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth, height=0.75\textheight]{images/programdo vs model vs real.png}
+    \caption{La programación con ML se aproxima de mejor manera al comportamiento real.}
+  \end{figure}
+
+\end{frame}
+
+
+\section{Física y Machine Learning}
+
+\begin{frame}{Física y Machine Learning}
+  \centering
+  \vspace{1.5cm}
+  
+
+
+  % Subtítulo / Pregunta
+  {\Huge \textit{¿Cuál es el legado de la física al ML?}}
+  
+  \vspace{1.5cm}
+  
+  % Pequeña nota al pie o contexto
+  {\normalsize De los principios fundamentales de la naturaleza \\ a la inteligencia artificial}
+\end{frame}
+
+
+% ==============================================================================
+% SECCIÓN: EL LEGADO DE LA FÍSICA
+% ==============================================================================
+
+% --- FRAME 1: Mecánica Estadística ---
+\begin{frame}{1. El Legado: Mecánica Estadística y Energía}
+  \framesubtitle{De la distribución de Boltzmann a las Redes Neuronales}
+
+  \begin{columns}[c] % Alineación vertical centrada
+    % --- Columna de Texto ---
+    \begin{column}{0.55\textwidth}
+      La física estadística describe cómo sistemas complejos tienden a estados de \textbf{mínima energía} (equilibrio térmico).
+
+      \vspace{1em}
+      \textbf{Aplicación en ML:}
+      \begin{itemize}
+        \item \textbf{Modelos Basados en Energía:} Arquitecturas como las \textit{Máquinas de Boltzmann} o redes de Hopfield definen una "función de energía" para el estado de sus neuronas.
+        \item El proceso de aprendizaje consiste en encontrar la configuración de pesos que minimiza esta energía del sistema.
+      \end{itemize}
+    \end{column}
+
+    % --- Columna de Imagen ---
+    \begin{column}{0.4\textwidth}
+      \centering
+      % SUGERENCIA DE IMAGEN: Un diagrama de una Máquina de Boltzmann restringida (RBM) o un paisaje de energía con mínimos locales.
+      \includegraphics[width=0.9\textwidth, keepaspectratio]{images/boltzman.png}
+      \captionof{figure}{\footnotesize Redes que buscan estados de "baja energía".}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+
+\begin{frame}{2. El Legado: Difusión y Termodinámica}
+  \framesubtitle{De la dispersión al arte generativo}
+
+La física describe cómo una estructura (como una imagen `x(0)` de un perro) 
+se degrada gradualmente en ruido puro `x(T)` a lo largo del tiempo. 
+Es el proceso natural de \textbf{difusión} y aumento de la entropía.
+
+Partiendo del ruido puro (`x(T)`), el modelo utiliza una "función de score" 
+para guiar la reconstrucción, eliminando el ruido paso a paso hasta generar 
+una imagen coherente (`x(0)`).
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/difusion.png} % ¡Asegúrate de poner el nombre correcto de tu archivo de imagen!
+\end{frame}
+
+
+
+% --- FRAME 3: Simetrías e Invarianzas ---
+\begin{frame}{3. El Legado: Teoría de Grupos y Simetrías}
+  \framesubtitle{Reconociendo patrones sin importar la posición}
+
+  \begin{columns}[c]
+    % --- Columna de Texto ---
+    \begin{column}{0.55\textwidth}
+      En física, las leyes fundamentales no cambian si te mueves en el espacio (\textbf{invarianza traslacional}) o rotas el sistema.
+
+      \vspace{1em}
+      \textbf{Aplicación en ML (Visión por Computador):}
+      \begin{itemize}
+        \item Las \textbf{Redes Convolucionales (CNNs)} incorporan esta invarianza física en su diseño.
+        \item Usan el mismo filtro (kernel) deslizándose por toda la imagen, lo que les permite reconocer un objeto (ej. un gato) sin importar en qué parte de la foto se encuentre.
+      \end{itemize}
+    \end{column}
+
+    % --- Columna de Imagen ---
+    \begin{column}{0.4\textwidth}
+      \centering
+      % SUGERENCIA DE IMAGEN: Una animación o diagrama de una convolución 2D, mostrando un filtro pequeño deslizándose sobre una imagen más grande.
+      \includegraphics[width=0.9\textwidth, keepaspectratio]{images/cnn-kernel.png}
+      \captionof{figure}{\footnotesize Convolución: aplicando la misma "regla" en todo el espacio.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% --- FRAME 4: Principio de Mínima Acción ---
+\begin{frame}{4. El Legado: El Principio de Mínima Acción}
+  \framesubtitle{La base fundamental del entrenamiento}
+
+  \begin{columns}[c]
+    % --- Columna de Texto ---
+    \begin{column}{0.55\textwidth}
+      Un principio universal de la física clásica: la naturaleza siempre sigue el camino que minimiza la "acción" (el costo energético de la trayectoria).
+
+      \vspace{1em}
+      \textbf{Aplicación en ML (Optimización):}
+      \begin{itemize}
+        \item Es el fundamento filosófico del entrenamiento de redes neuronales.
+        \item El algoritmo de \textbf{Backpropagation} y el \textbf{Descenso de Gradiente} buscan la trayectoria óptima en el espacio de parámetros (pesos) que minimice la función de costo (error).
+      \end{itemize}
+    \end{column}
+
+    % --- Columna de Imagen ---
+    \begin{column}{0.4\textwidth}
+      \centering
+      % SUGERENCIA DE IMAGEN: Un gráfico de una superficie de pérdida 3D compleja, mostrando una trayectoria descendiendo hacia el punto más bajo (el mínimo global).
+      \includegraphics[width=0.9\textwidth, keepaspectratio]{images/gradient-decent.png} % Reusando imagen de ejemplo
+      \captionof{figure}{\footnotesize Buscando la trayectoria de mínimo "costo".}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+% --- FRAME 3: El Retorno (Del ML a la Física) ---
+\begin{frame}{3. La Revolución Inversa: ML potenciando la Física}
+  Hoy, la inteligencia artificial devuelve el favor resolviendo problemas físicos intratables:
+
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item \textbf{Aceleración de Simulaciones:}
+        Redes neuronales que actúan como \textit{surrogates} para emular simulaciones de fluidos (CFD) o clima miles de veces más rápido.
+        
+        \item \textbf{Física de Partículas (CERN):}
+        Clasificación de eventos en colisionadores y detección de anomalías en la búsqueda de nueva física.
+      \end{itemize}
+    \end{column}
+
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item \textbf{PINNs (Physics-Informed Neural Networks):}
+        Redes que integran ecuaciones diferenciales (PDEs) en su función de pérdida, respetando las leyes físicas (conservación de masa/energía) durante el aprendizaje.
+        
+        \item \textbf{Astronomía:}
+        Clasificación automática de galaxias y detección de exoplanetas en datos ruidosos.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+% --- FRAME 4: Frase Final ---
+\begin{frame}
+  \centering
+  \vspace{2cm}
+  
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title} \Huge Conclusión
+  \end{beamercolorbox}
+  
+  \vspace{1.5cm}
+  
+  \large
+  \textit{“Ambos campos buscan estados de equilibrio: \\
+  la física mediante la minimización de la \textbf{energía}, \\
+  el aprendizaje automático mediante la minimización del \textbf{error}.”}
+  
+  \vspace{2cm}
+\end{frame}
+
+
+\end{document}
