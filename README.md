@@ -36,6 +36,18 @@ This repository is designed to:
 
 Below is a list of the conferences included in this repository. Each entry provides the title, date, and a brief academic description.
 
+## 2026 – World Youth Festival (WYF 2026 – Ekaterinburg, Russia)
+
+* **Directory**: [2026-wyf-ekaterinburg](https://github.com/Mitchell-Mirano/mmirano-talks/tree/main/2026/wyf-ekaterinburg)
+* **Title**: *Beyond Heavy Frameworks: Efficient Machine Learning and Autograd with Sorix, NumPy, and CuPy*
+* **Language**: English (EN)
+* **Date**: 2026
+* **Venue**: World Youth Festival (WYF 2026) – Ekaterinburg, Russian Federation
+* **Platform & Documentation**: [sorix.mitchellmirano.com](https://sorix.mitchellmirano.com)
+* **Description**: International technical presentation focused on computational autograd mechanics, efficient neural network computing, and democratizing artificial intelligence. The session details how dynamic computational graphs are executed in reverse-mode automatic differentiation, the unified `xp` backend architecture leveraging [NumPy](https://numpy.org/) and [CuPy](https://cupy.dev/), and low-level memory and tensor optimizations in [sorix](https://github.com/Mitchell-Mirano/sorix). It presents benchmark evidence demonstrating that Sorix outperforms PyTorch in CPU training for standard models while slashing system footprint by ~13x to ~28x (54 MB vs 6.8 GB), making it an ideal engine for edge AI and accessible education without high-end clusters.
+
+
+
 ## 2025 – Scientific Computing Week (UNMSM)
 
 * **Directory**: [2025-11-semana-computacion-cientifica](https://github.com/Mitchell-Mirano/mmirano-talks/tree/main/2025/semana-computacion-cientifica)
@@ -69,10 +81,10 @@ Below is a list of the conferences included in this repository. Each entry provi
 
 ## Compiling Presentations
 
-Navigate to the event directory:
+Navigate to any event directory (e.g., the 2026 World Youth Festival talk):
 
 ```bash
-cd 2025/2025-11-semana-computacion-cientifica
+cd 2026/wyf-ekaterinburg
 latexmk -pdf veamer.tex
 ```
 
@@ -82,7 +94,7 @@ Alternatively, using `uv`:
 uv run latexmk -pdf veamer.tex
 ```
 
-The resulting file will be `veamer.pdf`.
+The resulting compiled slide deck will be `veamer.pdf`.
 
 
 ## Requirements
